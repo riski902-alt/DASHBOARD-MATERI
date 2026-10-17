@@ -393,8 +393,7 @@
     "judul_bab": "Bab 1: Berpikir Komputasional",
     "judul_pertemuan": "Pertemuan 1: Pengenalan 4 Pilar Berpikir Komputasional (Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma)",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Berpikir Komputasional</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu menerapkan berpikir komputasional dalam menyelesaikan persoalan yang mengandung himpunan data berstruktur sederhana dengan volume kecil.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu menjelaskan dan mengidentifikasi penerapan 4 pilar berpikir komputasional dalam pemecahan masalah kehidupan sehari-hari.</p><h3>Topik:</h3><p>Pengenalan 4 Pilar Berpikir Komputasional (Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma)",
-    "konten</p>",
+      "atp": "<h3>Elemen:</h3><p>Berpikir Komputasional</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu menerapkan berpikir komputasional dalam menyelesaikan persoalan yang mengandung himpunan data berstruktur sederhana dengan volume kecil.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu menjelaskan dan mengidentifikasi penerapan 4 pilar berpikir komputasional dalam pemecahan masalah kehidupan sehari-hari.</p><h3>Topik:</h3><p>Pengenalan 4 Pilar Berpikir Komputasional (Dekomposisi, Pengenalan Pola, Abstraksi, Algoritma)</p>",
       "asesmen-awal": "materi/kelas8/sem1/bab1/p1-asesmen.html",
       "pertanyaan-esensial": "materi/kelas8/sem1/bab1/p1-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas8/sem1/bab1/p1-eksplorasi.html",
@@ -979,7 +978,7 @@
     "judul_bab": "Bab 3: Keamanan Digital",
     "judul_pertemuan": "Pertemuan 3: Konsep Kredensial & Pembuatan Kata Sandi yang Aman (Kombinasi Karakter & Password Manager)",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu membuat kata sandi yang aman.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu merancang kata sandi yang kuat (kombinasi huruf, angka, simbol) dan mengelola kredensial menggunakan password manager.</p>Topik:</h3><p>Konsep Kredensial & Pembuatan Kata Sandi yang Aman (Kombinasi Karakter & Password Manager)</p>",
+      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu membuat kata sandi yang aman.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu merancang kata sandi yang kuat (kombinasi huruf, angka, simbol) dan mengelola kredensial menggunakan password manager.</p><h3>Topik:</h3><p>Konsep Kredensial & Pembuatan Kata Sandi yang Aman (Kombinasi Karakter & Password Manager)</p>",
       "asesmen-awal": "materi/kelas9/sem2/bab3/p3-asesmen.html",
       "pertanyaan-esensial": "materi/kelas9/sem2/bab3/p3-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas9/sem2/bab3/p3-eksplorasi.html",
@@ -992,7 +991,7 @@
     "judul_bab": "Bab 3: Keamanan Digital",
     "judul_pertemuan": "Pertemuan 4: Autentikasi Tambahan: Two-Factor Authentication (2FA) & Pengelolaan Akses Akun Digital",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu membuat kata sandi yang aman.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengaktifkan dan mengonfigurasi autentikasi dua faktor (2FA) pada berbagai akun platform digital untuk mencegah pembajakan.</p>Topik:</h3><p>Autentikasi Tambahan: Two-Factor Authentication (2FA) & Pengelolaan Akses Akun Digital</p>",
+      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu membuat kata sandi yang aman.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengaktifkan dan mengonfigurasi autentikasi dua faktor (2FA) pada berbagai akun platform digital untuk mencegah pembajakan.</p><h3>Topik:</h3><p>Autentikasi Tambahan: Two-Factor Authentication (2FA) & Pengelolaan Akses Akun Digital</p>",
       "asesmen-awal": "materi/kelas9/sem2/bab3/p4-asesmen.html",
       "pertanyaan-esensial": "materi/kelas9/sem2/bab3/p4-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas9/sem2/bab3/p4-eksplorasi.html",
@@ -1005,7 +1004,7 @@
     "judul_bab": "Bab 3: Keamanan Digital",
     "judul_pertemuan": "Pertemuan 5: Klasifikasi Informasi: Memilah Informasi Privat vs. Informasi Publik di Dunia Digital",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memilah informasi yang bersifat privat dan publik.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengelompokkan data pribadi sensitif (privat) dan data umum (publik) yang aman atau bahaya untuk dibagikan.</p>Topik:</h3><p>Klasifikasi Informasi: Memilah Informasi Privat vs. Informasi Publik di Dunia Digital</p>",
+      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memilah informasi yang bersifat privat dan publik.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengelompokkan data pribadi sensitif (privat) dan data umum (publik) yang aman atau bahaya untuk dibagikan.</p><h3>Topik:</h3><p>Klasifikasi Informasi: Memilah Informasi Privat vs. Informasi Publik di Dunia Digital</p>",
       "asesmen-awal": "materi/kelas9/sem2/bab3/p5-asesmen.html",
       "pertanyaan-esensial": "materi/kelas9/sem2/bab3/p5-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas9/sem2/bab3/p5-eksplorasi.html",
@@ -1018,7 +1017,7 @@
     "judul_bab": "Bab 3: Keamanan Digital",
     "judul_pertemuan": "Pertemuan 6: Etika Berbagi & Pencegahan Kebocoran Informasi Personal di Media Sosial dan Platform Online",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memilah informasi yang bersifat privat dan publik.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengevaluasi risiko kebocoran data saat mengunggah foto/dokumen di media sosial dan membatasi izin akses aplikasi.</p>Topik:</h3><p>Etika Berbagi & Pencegahan Kebocoran Informasi Personal di Media Sosial dan Platform Online</p>",
+      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memilah informasi yang bersifat privat dan publik.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu mengevaluasi risiko kebocoran data saat mengunggah foto/dokumen di media sosial dan membatasi izin akses aplikasi.</p><h3>Topik:</h3><p>Etika Berbagi & Pencegahan Kebocoran Informasi Personal di Media Sosial dan Platform Online</p>",
       "asesmen-awal": "materi/kelas9/sem2/bab3/p6-asesmen.html",
       "pertanyaan-esensial": "materi/kelas9/sem2/bab3/p6-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas9/sem2/bab3/p6-eksplorasi.html",
@@ -1044,7 +1043,7 @@
     "judul_bab": "Bab 3: Keamanan Digital",
     "judul_pertemuan": "Pertemuan 8: Audit Keamanan Digital Mandiri & Proyek Kampanye Digital Safety",
     "konten": {
-      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memahami pengamanan perangkat dari malware, membuat kata sandi aman, memilah informasi privat/publik, serta melindungi data pribadi dan identitas digital.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu melakukan audit ketahanan keamanan akun/perangkat milik sendiri serta menyajikan panduan keselamatan digital bagi teman sebaya.</p>Topik:</h3><p>Audit Keamanan Digital Mandiri & Proyek Kampanye Digital Safety</p>",
+      "atp": "<h3>Elemen:</h3><p>Literasi Digital</p></h3><p>Keamanan Digital</p><h3>Capaian Pembelajaran:</h3><p>Murid mampu memahami pengamanan perangkat dari malware, membuat kata sandi aman, memilah informasi privat/publik, serta melindungi data pribadi dan identitas digital.</p><h3>Tujuan Pembelajaran:</h3><p>Murid mampu melakukan audit ketahanan keamanan akun/perangkat milik sendiri serta menyajikan panduan keselamatan digital bagi teman sebaya.</p><h3>Topik:</h3><p>Audit Keamanan Digital Mandiri & Proyek Kampanye Digital Safety</p>",
       "asesmen-awal": "materi/kelas9/sem2/bab3/p8-asesmen.html",
       "pertanyaan-esensial": "materi/kelas9/sem2/bab3/p8-pertanyaan.html",
       "eksplorasi-konsep": "materi/kelas9/sem2/bab3/p8-eksplorasi.html",
