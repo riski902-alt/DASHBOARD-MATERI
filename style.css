@@ -137,236 +137,69 @@
         @keyframes rippleAnim { to { transform: scale(4); opacity: 0; } }
         @keyframes contentSlideUp { from { opacity: 0; transform: translateY(16px) scale(0.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
         
-        @media (max-width: 768px) {
-            .page-title-section { padding: 24px; margin: 10px 4%; }
-            .hero-icon { display: none; }
-            .chapter-title { font-size: 1.3rem; }
-            /* ==========================================
-   GAYA UNTUK ISI MATERI DARI JSON
-========================================== */
-
-/* Mengatur gaya teks paragraf di semua menu materi */
-.materi-content p {
-    font-size: 15px;
-    line-height: 1.8; /* Membuat jarak antar baris agar nyaman dibaca */
-    color: #314F68;
-    margin-bottom: 16px;
-    text-align: justify; /* Membuat teks rata kanan-kiri */
+       @media (max-width: 768px) {
+    .page-title-section { padding: 24px; margin: 10px 4%; }
+    .hero-icon { display: none; }
+    .chapter-title { font-size: 1.3rem; }
 }
 
-/* Mengatur gaya teks judul (<h3>) di semua menu materi */
+/* ==========================================
+   GAYA UNTUK ISI MATERI DARI JSON
+========================================== */
+.materi-content p {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #314F68;
+    margin-bottom: 16px;
+    text-align: justify;
+}
 .materi-content h3 {
     font-size: 18px;
     color: var(--deep-navy);
     margin-top: 24px;
     margin-bottom: 12px;
-    border-bottom: 2px solid var(--soft-denim); /* Garis bawah yang rapi */
+    border-bottom: 2px solid var(--soft-denim);
     padding-bottom: 6px;
     display: inline-block;
+}
 
-    /* ==========================================
+/* ==========================================
    REDESAIN HALAMAN ATP (ALUR TUJUAN PEMBELAJARAN)
-   Gaya: Modern EdTech, Bento Grid, Soft Glassmorphism
 ========================================== */
+.atp-wrapper { animation: atpFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; display: flex; flex-direction: column; gap: 24px; }
+.atp-header { background: linear-gradient(135deg, var(--deep-navy) 0%, var(--denim-blue) 100%); border-radius: 24px; padding: 32px; color: var(--pure-white); position: relative; overflow: hidden; box-shadow: 0 12px 30px rgba(20, 36, 58, 0.15); display: flex; align-items: center; gap: 20px; }
+.atp-header-icon { font-size: 4rem; color: var(--cyan-accent); opacity: 0.9; animation: atpFloat 3s ease-in-out infinite; }
+.atp-header-text h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.5px; }
+.atp-header-text p { font-size: 1rem; color: var(--cyan-light); opacity: 0.9; }
+.atp-header-deco { position: absolute; right: -20px; top: -30px; font-size: 12rem; color: rgba(255, 255, 255, 0.05); transform: rotate(-15deg); }
 
-/* Wadah Utama ATP */
-.atp-wrapper {
-    animation: atpFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
+.atp-bento { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.atp-card { background: var(--pure-white); border: 1px solid rgba(66, 106, 145, 0.15); border-radius: 20px; padding: 26px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+.atp-card:hover { transform: translateY(-6px); box-shadow: 0 16px 32px rgba(66, 106, 145, 0.12); border-color: var(--cyan-accent); }
+.atp-card-icon-wrapper { width: 50px; height: 50px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 1.8rem; margin-bottom: 16px; }
+.atp-card h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+.atp-card p { font-size: 0.95rem; line-height: 1.6; color: #475569; }
 
-/* Header ATP */
-.atp-header {
-    background: linear-gradient(135deg, var(--deep-navy) 0%, var(--denim-blue) 100%);
-    border-radius: 24px;
-    padding: 32px;
-    color: var(--pure-white);
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 12px 30px rgba(20, 36, 58, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.atp-header-icon {
-    font-size: 4rem;
-    color: var(--cyan-accent);
-    opacity: 0.9;
-    animation: atpFloat 3s ease-in-out infinite;
-}
-.atp-header-text h2 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 6px;
-    letter-spacing: -0.5px;
-}
-.atp-header-text p {
-    font-size: 1rem;
-    color: var(--cyan-light);
-    opacity: 0.9;
-}
-.atp-header-deco {
-    position: absolute;
-    right: -20px;
-    top: -30px;
-    font-size: 12rem;
-    color: rgba(255, 255, 255, 0.05);
-    transform: rotate(-15deg);
-}
+.atp-journey { background: var(--pure-white); border-radius: 24px; padding: 30px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03); border: 1px solid rgba(0, 0, 0, 0.05); }
+.atp-journey h3 { text-align: center; font-size: 1.2rem; color: var(--deep-navy); margin-bottom: 24px; }
+.atp-journey-steps { display: flex; justify-content: space-between; align-items: center; position: relative; }
+.atp-step { display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 2; background: var(--pure-white); padding: 0 10px; }
+.atp-step-icon { width: 46px; height: 46px; background: var(--off-white); border: 2px solid var(--soft-denim); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.4rem; color: var(--denim-blue); transition: all 0.3s ease; }
+.atp-step:hover .atp-step-icon { background: var(--status-green); border-color: var(--status-green); color: var(--deep-navy); transform: scale(1.1); }
+.atp-step span { font-size: 0.85rem; font-weight: 600; color: var(--deep-navy); text-align: center; }
+.atp-journey-line { position: absolute; top: 23px; left: 40px; right: 40px; height: 3px; background: repeating-linear-gradient(90deg, var(--soft-denim) 0, var(--soft-denim) 8px, transparent 8px, transparent 16px); z-index: 1; opacity: 0.3; }
 
-/* Bento Grid Kartu Informasi */
-.atp-bento {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-}
-.atp-card {
-    background: var(--pure-white);
-    border: 1px solid rgba(66, 106, 145, 0.15);
-    border-radius: 20px;
-    padding: 26px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-}
-.atp-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 32px rgba(66, 106, 145, 0.12);
-    border-color: var(--cyan-accent);
-}
-.atp-card-icon-wrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.8rem;
-    margin-bottom: 16px;
-}
-.atp-card h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 12px;
-}
-.atp-card p {
-    font-size: 0.95rem;
-    line-height: 1.6;
-    color: #475569;
-}
+.atp-motivation { background: rgba(29, 209, 161, 0.1); border-left: 6px solid var(--status-green); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
+.atp-motivation i { font-size: 2.2rem; color: var(--status-green); }
+.atp-motivation h4 { font-size: 1.1rem; color: var(--deep-navy); margin-bottom: 4px; }
+.atp-motivation p { font-size: 0.9rem; color: var(--denim-blue); }
 
-/* Visualisasi Perjalanan Belajar */
-.atp-journey {
-    background: var(--pure-white);
-    border-radius: 24px;
-    padding: 30px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-.atp-journey h3 {
-    text-align: center;
-    font-size: 1.2rem;
-    color: var(--deep-navy);
-    margin-bottom: 24px;
-}
-.atp-journey-steps {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-}
-.atp-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    z-index: 2;
-    background: var(--pure-white);
-    padding: 0 10px;
-}
-.atp-step-icon {
-    width: 46px;
-    height: 46px;
-    background: var(--off-white);
-    border: 2px solid var(--soft-denim);
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.4rem;
-    color: var(--denim-blue);
-    transition: all 0.3s ease;
-}
-.atp-step:hover .atp-step-icon {
-    background: var(--status-green);
-    border-color: var(--status-green);
-    color: var(--deep-navy);
-    transform: scale(1.1);
-}
-.atp-step span {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--deep-navy);
-    text-align: center;
-}
-.atp-journey-line {
-    position: absolute;
-    top: 23px;
-    left: 40px;
-    right: 40px;
-    height: 3px;
-    background: repeating-linear-gradient(90deg, var(--soft-denim) 0, var(--soft-denim) 8px, transparent 8px, transparent 16px);
-    z-index: 1;
-    opacity: 0.3;
-}
+@keyframes atpFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes atpFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-/* Panel Motivasi */
-.atp-motivation {
-    background: rgba(29, 209, 161, 0.1);
-    border-left: 6px solid var(--status-green);
-    border-radius: 16px;
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-.atp-motivation i {
-    font-size: 2.2rem;
-    color: var(--status-green);
-}
-.atp-motivation h4 {
-    font-size: 1.1rem;
-    color: var(--deep-navy);
-    margin-bottom: 4px;
-}
-.atp-motivation p {
-    font-size: 0.9rem;
-    color: var(--denim-blue);
-}
-
-/* Animasi */
-@keyframes atpFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes atpFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-/* Responsive (Ponsel) */
 @media (max-width: 768px) {
     .atp-header { padding: 24px; flex-direction: column; text-align: center; }
     .atp-header-deco { display: none; }
     .atp-journey-steps { flex-direction: column; gap: 30px; }
-    .atp-journey-line {
-        top: 20px; bottom: 20px; left: 50%; right: auto;
-        width: 3px; height: auto; transform: translateX(-50%);
-        background: repeating-linear-gradient(180deg, var(--soft-denim) 0, var(--soft-denim) 8px, transparent 8px, transparent 16px);
-    }
+    .atp-journey-line { top: 20px; bottom: 20px; left: 50%; right: auto; width: 3px; height: auto; transform: translateX(-50%); background: repeating-linear-gradient(180deg, var(--soft-denim) 0, var(--soft-denim) 8px, transparent 8px, transparent 16px); }
 }
-}
-        }
