@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informatika Fun! - Dashboard Pembelajaran Interaktif</title>
 
-    <!-- Panggil script pengecekan login -->
-<script src="cek-login.js"></script>
+    <!-- Panggil script pengecekan login dan komponen ATP -->
+    <script src="cek-login.js"></script>
+    <script src="komponen-atp.js"></script>
     
     <!-- Memuat Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -15,13 +16,14 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <!-- Memuat File CSS Eksternal -->
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
 </head>
 <body>
     
     <!-- WADAH LOGIN -->
     <div id="login-container">
+        <!-- ... [Struktur form login tetap tidak berubah] ... -->
         <div class="login-card">
             <div class="header-icon">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
@@ -93,8 +95,8 @@
                     <span id="user-name" class="user-name">Siswa</span>
                 </div>
                 <button id="btnLogout" class="btn-profile" title="Keluar / Ganti Akun" style="color: #e63946;">
-    <i class="ph ph-sign-out"></i>
-</button>
+                    <i class="ph ph-sign-out"></i>
+                </button>
             </div>
         </header>
 
@@ -158,7 +160,6 @@
         const statusDiv = document.getElementById('statusMessage');
         const btnLogin = document.getElementById('btnLogin');
 
-        // Fungsi visual tombol (Ditulis cukup 1 kali)
         function createRipple(event, element) {
             const circle = document.createElement("span");
             const diameter = Math.max(element.clientWidth, element.clientHeight);
@@ -191,11 +192,9 @@
             localStorage.setItem(storageKey, JSON.stringify(userProgress));
         }
 
-        // URL Params untuk dinamis konten materi
         const urlParams = new URLSearchParams(window.location.search);
         const pertemuanId = urlParams.get('id') || 'kelas7-sem1-bab1-pertemuan1'; 
 
-        // FUNGSI UTAMA MATERI
         async function mulaiAplikasi() {
             userProgress = JSON.parse(localStorage.getItem(storageKey)) || {};
             const menuContainer = document.getElementById("menu-row");
@@ -207,11 +206,9 @@
             contentContainer.innerHTML = "";
 
             try {
-                // Mengambil data dari file materi.json
                 const response = await fetch('materi.json');
                 const databaseMateri = await response.json();
                 
-                // Memilih materi sesuai dengan ID di URL
                 const materiSaatIni = databaseMateri[pertemuanId];
 
                 if (!materiSaatIni) {
@@ -219,7 +216,6 @@
                     return;
                 }
 
-                // Mengubah Judul Halaman sesuai JSON
                 document.querySelector('.chapter-title').textContent = materiSaatIni.judul_bab;
                 document.querySelector('.meeting-title').textContent = materiSaatIni.judul_pertemuan;
 
@@ -239,8 +235,16 @@
                     pane.className = "tab-pane";
                     let actionButtonText = menu.type === "read" ? "Tandai Selesai Dibaca" : "Kirim Jawaban Tugas";
                     
-                    // Mengambil isi HTML spesifik untuk menu ini dari JSON
-                    const isiKonten = materiSaatIni.konten[menu.id] || `<p style="margin-top: 12px; color: #555;">Materi belum tersedia.</p>`;
+                    let isiKonten = materiSaatIni.konten[menu.id] || `<p style="margin-top: 12px; color: #555;">Materi belum tersedia.</p>`;
+
+                    // ========================================================
+                    // LOGIKA REDESAIN KHUSUS MENU ATP (SEKARANG SANGAT RAPI!)
+                    // ========================================================
+                    if (menu.id === 'atp' && materiSaatIni.konten[menu.id]) {
+                        // Memanggil fungsi eksternal dari komponen-atp.js
+                        isiKonten = buatDesainATP(materiSaatIni.konten[menu.id]);
+                    }
+                    // ========================================================
 
                     pane.innerHTML = `
                         <div class="content-card">
@@ -274,7 +278,6 @@
                     menuContainer.appendChild(btn);
                     contentContainer.appendChild(pane);
 
-                    // Kode pengiriman Firebase
                     const actionBtn = document.getElementById(`action-${menu.id}`);
                     if(actionBtn) {
                         actionBtn.addEventListener("click", async function(e) {
@@ -314,11 +317,10 @@
 
             } catch (error) {
                 console.error("Gagal memuat materi:", error);
-                contentContainer.innerHTML = "<h3>Terjadi kesalahan saat memuat materi. Pastikan kamu menjalankan file ini dengan Live Server (karena ada materi.json).</h3>";
+                contentContainer.innerHTML = "<h3>Terjadi kesalahan saat memuat materi. Pastikan kamu menjalankan file ini dengan Live Server.</h3>";
             }
         }
 
-        // Pengecekan Login Otomatis (Ditulis 1 Kali)
         if (currentUser && currentNISN) {
             loginContainer.classList.add('hidden');
             dashboardContainer.classList.remove('hidden');
@@ -326,7 +328,6 @@
             mulaiAplikasi();
         }
 
-        // Peran Siswa/Guru
         const roleInputs = document.querySelectorAll('input[name="userRole"]');
         const siswaSection = document.getElementById('siswaSection');
         const guruSection = document.getElementById('guruSection');
@@ -350,7 +351,6 @@
             });
         });
 
-        // PENANGANAN UTAMA FORM SUBMIT LOGIN
         loginForm.addEventListener('submit', async (event) => {
             event.preventDefault(); 
             
@@ -472,7 +472,6 @@
             }
         });
 
-        // KODE LOGOUT
         const btnLogout = document.getElementById('btnLogout');
         if (btnLogout) {
             btnLogout.addEventListener('click', () => {
