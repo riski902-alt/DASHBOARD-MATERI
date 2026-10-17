@@ -246,19 +246,30 @@
                     }
                     // ========================================================
 
-                    pane.innerHTML = `
-                        <div class="content-card">
+                    // Logika untuk menyembunyikan ikon & judul default khusus di menu ATP
+                    let headerBawaan = '';
+                    if (menu.id !== 'atp') {
+                        headerBawaan = `
                             <i class="ph-duotone ${menu.icon}" style="font-size: 3rem; color: var(--denim-blue); margin-bottom: 12px; display: inline-block;"></i>
                             <h2>${menu.title}</h2>
+                        `;
+                    }
+
+                    // Logika untuk mengubah teks tombol yang sudah selesai
+                    let teksSelesai = menu.type === "read" ? "Selesai Dibaca" : "Selesai Dikerjakan";
+
+                    pane.innerHTML = `
+                        <div class="content-card">
+                            ${headerBawaan}
                             
-                            <div class="materi-content" style="margin-top: 20px; text-align: left;">
+                            <div class="materi-content" style="margin-top: ${menu.id === 'atp' ? '0' : '20px'}; text-align: left;">
                                 ${isiKonten}
                             </div>
 
                             <br>
                             <button id="action-${menu.id}" class="btn-action ${currentStatus === 'completed' ? 'success' : ''}">
                                 <i class="ph-bold ${currentStatus === 'completed' ? 'ph-check' : 'ph-paper-plane-right'}"></i> 
-                                <span class="btn-text">${currentStatus === 'completed' ? 'Selesai Dikerjakan' : actionButtonText}</span>
+                                <span class="btn-text">${currentStatus === 'completed' ? teksSelesai : actionButtonText}</span>
                             </button>
                         </div>
                     `;
