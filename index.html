@@ -431,22 +431,34 @@
                         }
                     });
 
-                    if (siswaCocok) {
-                        showStatus('Login berhasil! Membuka materi...', 'success');
-                        
-                        localStorage.setItem('infoFun_Nama', namaInput);
-                        localStorage.setItem('infoFun_NISN', nisnInput);
-                        currentUser = namaInput;
-                        currentNISN = nisnInput;
-                        storageKey = `progress_Informatika_${currentNISN}`;
-                        userNameDisplay.textContent = currentUser;
+    if (siswaCocok) {
+    showStatus('Login berhasil! Membuka materi...', 'success');
+    
+    localStorage.setItem('infoFun_Nama', namaInput);
+    localStorage.setItem('infoFun_NISN', nisnInput);
+    currentUser = namaInput;
+    currentNISN = nisnInput;
+    storageKey = `progress_Informatika_${currentNISN}`;
+    userNameDisplay.textContent = currentUser;
 
-                        setTimeout(() => {
-                            loginContainer.classList.add('hidden');
-                            dashboardContainer.classList.remove('hidden');
-                            mulaiAplikasi();
-                        }, 500);
-                        
+    setTimeout(() => {
+        // Cek apakah ada materi yang dituju sebelum login
+        const targetMateri = sessionStorage.getItem('targetMateriSetelahLogin');
+
+        if (targetMateri) {
+            // Hapus data sementara agar tidak redirect berulang
+            sessionStorage.removeItem('targetMateriSetelahLogin');
+            // Alihkan pengguna langsung ke materi pilihan
+            window.location.href = `baca-materi.html?id=${targetMateri}&menu=atp`;
+        } else {
+            // Jika login biasa, buka dashboard seperti biasa
+            loginContainer.classList.add('hidden');
+            dashboardContainer.classList.remove('hidden');
+            mulaiAplikasi();
+        }
+    }, 500);
+}
+}
                     } else {
                         btnLogin.innerText = "LOGIN";
                         showStatus('Nama "' + namaInput + '" tidak cocok dengan NISN tersebut. (Nama terdaftar: ' + (namaDiDatabase || "tidak ditemukan") + ')', 'error');
