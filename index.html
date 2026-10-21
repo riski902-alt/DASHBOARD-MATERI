@@ -75,7 +75,7 @@
     <!-- ========================================== -->
     <div id="dashboard-container" class="hidden">
         
-        <!-- Tambahan: Tombol Navigasi Kelas -->
+        <!-- Tombol Navigasi Kelas -->
         <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
             <button id="btn-kelas7" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 7</button>
             <button id="btn-kelas8" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 8</button>
@@ -157,7 +157,6 @@
       // =======================================================
       // FUNGSI UNTUK MENGAMBIL MATERI SECARA DINAMIS
       // =======================================================
-      // Kita menambahkan 'kunciMateri' ke dalam tanda kurung
       async function tampilkanMateri(kunciMateri) {
           try {
               document.getElementById('tempat-isi-materi').innerHTML = "<p>Sedang memuat materi, mohon tunggu...</p>";
@@ -165,7 +164,6 @@
               const respon = await fetch('materi.json');
               const dataMaster = await respon.json();
               
-              // Mengambil data berdasarkan kunci yang dikirim oleh tombol
               const materiPilihan = dataMaster[kunciMateri];
 
               if (materiPilihan) {
@@ -179,6 +177,11 @@
                   
                   for (let namaMenu in semuaKonten) {
                       let isiMenu = semuaKonten[namaMenu];
+                      
+                      // Menggunakan fungsi desain ATP jika menu yang dibaca adalah 'atp'
+                      if (namaMenu === 'atp' && typeof buatDesainATP === 'function') {
+                          isiMenu = buatDesainATP(isiMenu);
+                      }
                       
                       let divBagian = document.createElement('div');
                       divBagian.style.marginBottom = "30px"; 
@@ -208,19 +211,17 @@
 
       // =======================================================
       // EVENT LISTENER UNTUK TOMBOL NAVIGASI KELAS
+      // Kunci disesuaikan dengan file materi.json
       // =======================================================
-      // Perhatikan kunci (key) di bawah ini, pastikan ejaannya sama persis dengan yang ada di file materi.json kamu
       document.getElementById('btn-kelas7').addEventListener('click', () => {
           tampilkanMateri("kelas7-sem1-bab1-pertemuan1");
       });
       
       document.getElementById('btn-kelas8').addEventListener('click', () => {
-          // Ganti teks di bawah ini jika penamaan kunci di JSON kamu berbeda
           tampilkanMateri("kelas8-sem1-bab1-pertemuan1");
       });
       
       document.getElementById('btn-kelas9').addEventListener('click', () => {
-          // Ganti teks di bawah ini jika penamaan kunci di JSON kamu berbeda
           tampilkanMateri("kelas9-sem1-bab1-pertemuan1");
       });
 
@@ -282,7 +283,6 @@
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  // Memuat materi kelas 7 secara default ketika baru login
                   tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
                 }, 800);
                 
@@ -316,7 +316,6 @@
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  // Memuat materi kelas 7 secara default ketika baru login
                   tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
                 }, 800);
               })
