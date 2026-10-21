@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Materi Informatika</title>
     
-    <!-- Memanggil file CSS dan Keamanan Login kita -->
+    <!-- Memanggil file CSS dan Keamanan Login -->
     <link rel="stylesheet" href="style.css">
     <script src="cek-login.js"></script>
-    <!-- Menambahkan script desain ATP -->
+    <!-- Script komponen ATP -->
     <script src="komponen-atp.js"></script>
 </head>
 <body>
@@ -32,54 +32,90 @@
                 </div>
             </div>
             
-            <button onclick="window.location.href='index.html'" class="btn-action">Kembali ke Menu Utama</button>
+            <button onclick="window.location.href='index.html'" class="btn-action" style="background-color: #dc3545; color: white; margin-top: 20px; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">
+                Kembali ke Menu Utama
+            </button>
         </div>
 
     </div>
 
-    <!-- SCRIPT UNTUK MERAKIT DATA DARI JSON -->
+    <!-- SCRIPT MERAKIT DATA DARI JSON -->
     <script>
+        // 1. Mengambil parameter 'id' dan 'menu' dari URL
         const urlParams = new URLSearchParams(window.location.search);
         const idPertemuan = urlParams.get('id');
         const idMenu = urlParams.get('menu');
 
         async function tampilkanMateri() {
             try {
+                // Membaca file data materi.json
                 const respon = await fetch('materi.json');
                 const dataMaster = await respon.json();
 
-                if (dataMaster[idPertemuan]) {
+                // 2. Mengecek apakah ID Pertemuan ada di materi.json
+                if (idPertemuan && dataMaster[idPertemuan]) {
                     const dataPilihan = dataMaster[idPertemuan];
 
+                    // Mengisi Judul Bab & Pertemuan
                     document.getElementById('tempat-judul-bab').innerText = dataPilihan.judul_bab;
                     document.getElementById('tempat-judul-pertemuan').innerText = dataPilihan.judul_pertemuan;
 
-                    if (dataPilihan.konten[idMenu]) {
+                    const wadahIsiMateri = document.getElementById('tempat-isi-materi');
+                    wadahIsiMateri.innerHTML = ''; // Mengosongkan status memuat
+
+                    const semuaKonten = dataPilihan.konten;
+
+                    // 3. LOGIKA CERDAS A: Jika parameter 'menu' spesifik ada di URL
+                    if (idMenu && semuaKonten[idMenu]) {
+                        let isiMenu = semuaKonten[idMenu];
                         
-                        // ========================================================
-                        // LOGIKA REDESAIN KHUSUS MENU ATP (SEKARANG SANGAT RAPI!)
-                        // ========================================================
-                        if (idMenu === 'atp') {
-                            // Memanggil fungsi dari komponen-atp.js
-                            const hasilDesain = buatDesainATP(dataPilihan.konten[idMenu]);
-                            document.getElementById('tempat-isi-materi').innerHTML = hasilDesain;
+                        if (idMenu === 'atp' && typeof buatDesainATP === 'function') {
+                            wadahIsiMateri.innerHTML = buatDesainATP(isiMenu);
                         } else {
-                            // JIKA BUKAN MENU ATP, TAMPILKAN SECARA NORMAL
-                            document.getElementById('tempat-isi-materi').innerHTML = dataPilihan.konten[idMenu];
+                            wadahIsiMateri.innerHTML = isiMenu;
                         }
-                    } else {
-                        document.getElementById('tempat-isi-materi').innerHTML = "<p>Maaf, materi untuk bagian ini belum diisi.</p>";
+                    } 
+                    // 4. LOGIKA CERDAS B: Jika 'menu' TIDAK ADA di URL, tampilkan SEMUA menu otomatis!
+                    else {
+                        for (let namaMenu in semuaKonten) {
+                            let isiMenu = semuaKonten[namaMenu];
+                            
+                            // Jika bagian ini adalah ATP, gunakan komponen ATP yang rapi
+                            if (namaMenu === 'atp' && typeof buatDesainATP === 'function') {
+                                isiMenu = buatDesainATP(isiMenu);
+                            }
+                            
+                            let divBagian = document.createElement('div');
+                            divBagian.style.marginBottom = "30px";
+                            
+                            let judulBagian = namaMenu.toUpperCase().replace(/-/g, ' ');
+                            
+                            divBagian.innerHTML = `
+                                <h3 class="section-title" style="color: #1a73e8; margin-bottom: 12px; font-weight: 700;">
+                                    📌 ${judulBagian}
+                                </h3>
+                                <div class="${namaMenu}-wrapper" style="background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+                                    ${isiMenu}
+                                </div>
+                            `;
+                            
+                            wadahIsiMateri.appendChild(divBagian);
+                        }
                     }
+
                 } else {
+                    // Jika ID tidak ditemukan atau tidak ada di URL
                     document.getElementById('tempat-judul-bab').innerText = "Data Tidak Ditemukan";
-                    document.getElementById('tempat-judul-pertemuan').innerText = "Pastikan link URL sudah benar.";
+                    document.getElementById('tempat-judul-pertemuan').innerText = "Mohon periksa kembali link URL Anda.";
+                    document.getElementById('tempat-isi-materi').innerHTML = "<p style='color: red;'>Materi tidak dapat dimuat karena ID tidak valid.</p>";
                 }
             } catch (error) {
                 console.error("Gagal mengambil materi:", error);
-                document.getElementById('tempat-isi-materi').innerHTML = "<p>Terjadi kesalahan saat memuat materi.</p>";
+                document.getElementById('tempat-isi-materi').innerHTML = "<p style='color: red;'>Terjadi kesalahan saat mengambil data dari materi.json.</p>";
             }
         }
 
+        // Jalankan fungsi saat halaman dimuat
         tampilkanMateri();
     </script>
 </body>
