@@ -74,6 +74,14 @@
     <!-- WADAH DASHBOARD MATERI                     -->
     <!-- ========================================== -->
     <div id="dashboard-container" class="hidden">
+        
+        <!-- Tambahan: Tombol Navigasi Kelas -->
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+            <button id="btn-kelas7" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 7</button>
+            <button id="btn-kelas8" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 8</button>
+            <button id="btn-kelas9" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 9</button>
+        </div>
+
         <div class="page-title-section">
             <div class="page-title-content">
                 <h1 id="tempat-judul-bab" class="chapter-title">Memuat Bab...</h1>
@@ -87,7 +95,7 @@
                     <p>Sedang mengambil data materi, mohon tunggu sebentar...</p>
                 </div>
             </div>
-            <button onclick="location.reload()" class="btn-action">Keluar / Kembali</button>
+            <button onclick="location.reload()" class="btn-action" style="background-color: #dc3545; color: white; margin-top: 20px;">Keluar / Kembali</button>
         </div>
     </div>
 
@@ -147,14 +155,18 @@
       });
 
       // =======================================================
-      // FUNGSI UNTUK MENGAMBIL DAN MENAMPILKAN SEMUA MATERI
+      // FUNGSI UNTUK MENGAMBIL MATERI SECARA DINAMIS
       // =======================================================
-      async function tampilkanMateri() {
+      // Kita menambahkan 'kunciMateri' ke dalam tanda kurung
+      async function tampilkanMateri(kunciMateri) {
           try {
+              document.getElementById('tempat-isi-materi').innerHTML = "<p>Sedang memuat materi, mohon tunggu...</p>";
+              
               const respon = await fetch('materi.json');
               const dataMaster = await respon.json();
               
-              const materiPilihan = dataMaster["kelas7-sem1-bab1-pertemuan1"];
+              // Mengambil data berdasarkan kunci yang dikirim oleh tombol
+              const materiPilihan = dataMaster[kunciMateri];
 
               if (materiPilihan) {
                   document.getElementById('tempat-judul-bab').innerText = materiPilihan.judul_bab;
@@ -185,12 +197,32 @@
                       divBagian.innerHTML = htmlKonten;
                       wadahIsiMateri.appendChild(divBagian);
                   }
+              } else {
+                  document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Materi untuk kelas ini belum tersedia di JSON.</p>";
               }
           } catch (error) {
               console.error("Gagal mengambil materi:", error);
-              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat materi. Pastikan file materi.json tersedia.</p>";
+              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat file materi.json.</p>";
           }
       }
+
+      // =======================================================
+      // EVENT LISTENER UNTUK TOMBOL NAVIGASI KELAS
+      // =======================================================
+      // Perhatikan kunci (key) di bawah ini, pastikan ejaannya sama persis dengan yang ada di file materi.json kamu
+      document.getElementById('btn-kelas7').addEventListener('click', () => {
+          tampilkanMateri("kelas7-sem1-bab1-pertemuan1");
+      });
+      
+      document.getElementById('btn-kelas8').addEventListener('click', () => {
+          // Ganti teks di bawah ini jika penamaan kunci di JSON kamu berbeda
+          tampilkanMateri("kelas8-sem1-bab1-pertemuan1");
+      });
+      
+      document.getElementById('btn-kelas9').addEventListener('click', () => {
+          // Ganti teks di bawah ini jika penamaan kunci di JSON kamu berbeda
+          tampilkanMateri("kelas9-sem1-bab1-pertemuan1");
+      });
 
       // =======================================================
       // PROSES LOGIN DAN TRANSISI
@@ -250,7 +282,8 @@
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri(); 
+                  // Memuat materi kelas 7 secara default ketika baru login
+                  tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
                 }, 800);
                 
               } else {
@@ -283,7 +316,8 @@
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri(); 
+                  // Memuat materi kelas 7 secara default ketika baru login
+                  tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
                 }, 800);
               })
               .catch(() => {
