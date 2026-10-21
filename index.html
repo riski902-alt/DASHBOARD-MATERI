@@ -3,247 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - INFORMATIKA FUN</title>
+    <title>Login & Materi - INFORMATIKA FUN</title>
+    
+    <!-- Memanggil font dan file CSS/JS milikmu -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #F7FBFF 0%, #AFC9D8 50%, #B7D8C8 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* KARTU LOGIN UTAMA */
-        .login-card {
-            background: #ffffff;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 32px 28px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .header-icon {
-            width: 50px;
-            height: 50px;
-            background: #F0F7FF;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px auto;
-            color: #527F9B;
-        }
-
-        .login-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: #173B57;
-            margin-bottom: 6px;
-        }
-
-        .login-desc {
-            font-size: 13px;
-            color: #314F68;
-            margin-bottom: 20px;
-        }
-
-        /* PILIHAN PERAN (SISWA / GURU) */
-        .role-selector {
-            display: flex;
-            background: #F1F5F9;
-            padding: 4px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .role-option {
-            flex: 1;
-        }
-
-        .role-option input[type="radio"] {
-            display: none;
-        }
-
-        .role-label {
-            display: block;
-            padding: 8px 12px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #314F68;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-
-        .role-option input[type="radio"]:checked + .role-label {
-            background: #ffffff;
-            color: #173B57;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-        }
-
-        /* INPUT FORM */
-        .input-group {
-            text-align: left;
-            margin-bottom: 16px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: 700;
-            color: #173B57;
-            margin-bottom: 6px;
-        }
-
-        .input-field {
-            width: 100%;
-            height: 44px;
-            background: #ffffff;
-            border: 1px solid #CBD5E1;
-            border-radius: 10px;
-            padding: 0 14px;
-            font-size: 14px;
-            color: #173B57;
-            outline: none;
-        }
-
-        .input-field:focus {
-            border-color: #527F9B;
-        }
-
-        .form-section {
-            display: none;
-        }
-
-        .form-section.active {
-            display: block;
-        }
-
-        /* TOMBOL & STATUS PESAN */
-        .btn-login {
-            width: 100%;
-            height: 46px;
-            background: #527F9B;
-            color: #ffffff;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-
-        .btn-login:hover {
-            background: #477FA0;
-        }
-
-        .status-message {
-            font-size: 13px;
-            font-weight: 600;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-            margin-top: 12px;
-        }
-
-        .status-error { background: #FEE2E2; color: #e63946; }
-        .status-success { background: #D1FAE5; color: #2a9d8f; }
-
-        .card-footer {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid #E2E8F0;
-        }
-
-        .footer-title { font-size: 12px; font-weight: 800; color: #314F68; }
-        .footer-desc { font-size: 11px; color: #6F91AA; margin-top: 2px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <!-- Hapus atau nonaktifkan cek-login.js sementara di file ini agar tidak bentrok dengan proses login -->
+    <script src="komponen-atp.js"></script>
 </head>
 <body>
 
-    <div class="login-card">
-        <div class="header-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
-            </svg>
-        </div>
-
-        <h1 class="login-title">LOGIN</h1>
-        <p class="login-desc">Silakan masuk untuk melanjutkan pembelajaran Informatika.</p>
-
-        <!-- Pilihan Peran -->
-        <div class="role-selector">
-            <div class="role-option">
-                <!-- Atribut checked dihapus dari Siswa agar tidak menjadi default -->
-                <input type="radio" id="roleSiswa" name="userRole" value="siswa">
-                <label for="roleSiswa" class="role-label">Siswa</label>
+    <!-- ========================================== -->
+    <!-- WADAH LOGIN (Tampil Pertama Kali)          -->
+    <!-- ========================================== -->
+    <div id="login-container">
+        <div class="login-card">
+            <div class="header-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
+                </svg>
             </div>
-            <div class="role-option">
-                <!-- Atribut checked ditambahkan ke Guru agar tampil pertama kali -->
-                <input type="radio" id="roleGuru" name="userRole" value="guru" checked>
-                <label for="roleGuru" class="role-label">Guru</label>
-            </div>
-        </div>
 
-        <!-- Form Login -->
-        <form id="loginForm">
-            <!-- Form Siswa -->
-            <!-- Class 'active' dihapus dari sini -->
-            <div id="siswaSection" class="form-section">
-                <div class="input-group">
-                    <label for="nama">Nama Lengkap</label>
-                    <input type="text" id="nama" class="input-field" placeholder="Masukkan nama lengkap">
+            <h1 class="login-title">LOGIN</h1>
+            <p class="login-desc">Silakan masuk untuk melanjutkan pembelajaran Informatika.</p>
+
+            <!-- Pilihan Peran -->
+            <div class="role-selector">
+                <div class="role-option">
+                    <input type="radio" id="roleSiswa" name="userRole" value="siswa">
+                    <label for="roleSiswa" class="role-label">Siswa</label>
                 </div>
-                <div class="input-group">
-                    <label for="nisn">NISN</label>
-                    <input type="text" id="nisn" class="input-field" placeholder="Masukkan NISN" inputmode="numeric">
+                <div class="role-option">
+                    <input type="radio" id="roleGuru" name="userRole" value="guru" checked>
+                    <label for="roleGuru" class="role-label">Guru</label>
                 </div>
             </div>
 
-            <!-- Form Guru -->
-            <!-- Class 'active' ditambahkan ke sini agar tampil pertama kali -->
-            <div id="guruSection" class="form-section active">
-                <div class="input-group">
-                    <label for="email">Email Guru</label>
-                    <input type="email" id="email" class="input-field" placeholder="Masukkan email guru">
+            <!-- Form Login -->
+            <form id="loginForm">
+                <div id="siswaSection" class="form-section">
+                    <div class="input-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input type="text" id="nama" class="input-field" placeholder="Masukkan nama lengkap">
+                    </div>
+                    <div class="input-group">
+                        <label for="nisn">NISN</label>
+                        <input type="text" id="nisn" class="input-field" placeholder="Masukkan NISN" inputmode="numeric">
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" class="input-field" placeholder="Masukkan password">
+
+                <div id="guruSection" class="form-section active">
+                    <div class="input-group">
+                        <label for="email">Email Guru</label>
+                        <input type="email" id="email" class="input-field" placeholder="Masukkan email guru">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="input-field" placeholder="Masukkan password">
+                    </div>
                 </div>
+
+                <button type="submit" id="btnLogin" class="btn-login-submit">LOGIN</button>
+                <div id="statusMessage" class="status-message"></div>
+            </form>
+
+            <div class="card-footer">
+                <p class="footer-title">INFORMATIKA FUN</p>
+                <p class="footer-desc">By: Riski Amalia, S.Pd</p>
             </div>
-
-            <button type="submit" id="btnLogin" class="btn-login">LOGIN</button>
-            <div id="statusMessage" class="status-message"></div>
-        </form>
-
-        <div class="card-footer">
-            <p class="footer-title">INFORMATIKA FUN</p>
-            <p class="footer-desc">By: Riski Amalia, S.Pd</p>
         </div>
     </div>
 
-    <!-- Script Firebase & Logika Sistem -->
+    <!-- ========================================== -->
+    <!-- WADAH DASHBOARD MATERI (Awalnya Disembunyikan) -->
+    <!-- ========================================== -->
+    <div id="dashboard-container" class="hidden">
+        
+        <div class="page-title-section">
+            <div class="page-title-content">
+                <h1 id="tempat-judul-bab" class="chapter-title">Memuat Bab...</h1>
+                <h2 id="tempat-judul-pertemuan" class="meeting-title">Memuat Pertemuan...</h2>
+            </div>
+        </div>
+
+        <div class="main-content-area">
+            <div class="content-card">
+                <div id="tempat-isi-materi" class="materi-content">
+                    <p>Sedang mengambil data materi, mohon tunggu sebentar...</p>
+                </div>
+            </div>
+            <!-- Tombol kembali ke login (opsional) -->
+            <button onclick="location.reload()" class="btn-action">Keluar / Kembali</button>
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SCRIPT FIREBASE & LOGIKA TRANSISI          -->
+    <!-- ========================================== -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
       import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
       import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-      // =========================================================================
-      // Konfigurasi Database Baru: DATABASEMATERIINFORMATIKA
-      // =========================================================================
       const firebaseConfig = {
         apiKey: "AIzaSyB7bt1JBOXkh81nYk8sVkuFpSmuJ3kOj94",
         authDomain: "databasemateriinformatika.firebaseapp.com",
@@ -253,34 +115,34 @@
         appId: "1:961327810612:web:48e952f20159a5b932e261",
         measurementId: "G-TDZQZ9L36B"
       };
-      // =========================================================================
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
+      // Elemen Form Login
       const roleInputs = document.querySelectorAll('input[name="userRole"]');
       const siswaSection = document.getElementById('siswaSection');
       const guruSection = document.getElementById('guruSection');
       const statusDiv = document.getElementById('statusMessage');
       const btnLogin = document.getElementById('btnLogin');
 
+      // Elemen Transisi
+      const loginContainer = document.getElementById('login-container');
+      const dashboardContainer = document.getElementById('dashboard-container');
+
       function showStatus(message, type) {
         if (!statusDiv) return;
         statusDiv.innerText = message;
         statusDiv.style.display = 'block';
-        if (type === 'error') {
-          statusDiv.className = 'status-message status-error';
-        } else {
-          statusDiv.className = 'status-message status-success';
-        }
+        statusDiv.className = type === 'error' ? 'status-message status-error' : 'status-message status-success';
       }
 
       function hideStatus() {
         if (statusDiv) statusDiv.style.display = 'none';
       }
 
-      // Berpindah antar pilihan Siswa dan Guru
+      // Berpindah antar form Siswa dan Guru
       roleInputs.forEach(input => {
         input.addEventListener('change', (e) => {
           hideStatus();
@@ -294,7 +156,40 @@
         });
       });
 
-      // Proses Tombol Login
+      // =======================================================
+      // FUNGSI UNTUK MENGAMBIL DATA JSON (Dijalankan pasca-login)
+      // =======================================================
+      async function tampilkanMateri() {
+          try {
+              // Kita ambil contoh default menampilkan materi kelas 7 bab 1 pertemuan 1
+              // Jika ingin dinamis, kamu bisa mengubah kunci teks di bawah ini
+              const respon = await fetch('materi.json');
+              const dataMaster = await respon.json();
+              
+              // Contoh kunci materi awal yang dimuat
+              const materiPilihan = dataMaster["kelas7-sem1-bab1-pertemuan1"];
+
+              if (materiPilihan) {
+                  document.getElementById('tempat-judul-bab').innerText = materiPilihan.judul_bab;
+                  document.getElementById('tempat-judul-pertemuan').innerText = materiPilihan.judul_pertemuan;
+                  
+                  // Secara default menampilkan bagian 'atp'
+                  const kontenMateri = materiPilihan.konten['atp'];
+                  if (typeof buatDesainATP === "function") {
+                      document.getElementById('tempat-isi-materi').innerHTML = buatDesainATP(kontenMateri);
+                  } else {
+                      document.getElementById('tempat-isi-materi').innerHTML = kontenMateri;
+                  }
+              }
+          } catch (error) {
+              console.error("Gagal mengambil materi:", error);
+              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat materi.</p>";
+          }
+      }
+
+      // =======================================================
+      // PROSES LOGIN DAN TRANSISI HALAMAN
+      // =======================================================
       if (btnLogin) {
         btnLogin.addEventListener('click', async (event) => {
           event.preventDefault();
@@ -312,11 +207,9 @@
             showStatus('Memeriksa data siswa...', 'success');
 
             try {
-              // Mencari dokumen berdasarkan NISN sebagai String (Teks)
               let q = query(collection(db, "siswa"), where("NISN", "==", nisnInput));
               let querySnapshot = await getDocs(q);
 
-              // Jika kosong, coba cari berdasarkan NISN sebagai Number (Angka)
               if (querySnapshot.empty) {
                 const nisnAngka = Number(nisnInput);
                 q = query(collection(db, "siswa"), where("NISN", "==", nisnAngka));
@@ -331,19 +224,11 @@
               let siswaCocok = false;
               querySnapshot.forEach((doc) => {
                 const data = doc.data();
-                
-                // MENCETAK DATA KE CONSOLE
-                console.log("Data yang ditarik dari database:", data);
-
-                // --- LOGIKA CERDAS PENCARIAN NAMA ---
                 for (let kolom in data) {
                   let namaKolomBersih = kolom.trim().toLowerCase().replace(/_/g, "");
-                  
                   if (namaKolomBersih.includes("nama")) {
                     let isiNamaDatabase = data[kolom];
-                    
-                    if (typeof isiNamaDatabase === "string" && 
-                        isiNamaDatabase.trim().toLowerCase() === namaInput.toLowerCase()) {
+                    if (typeof isiNamaDatabase === "string" && isiNamaDatabase.trim().toLowerCase() === namaInput.toLowerCase()) {
                       siswaCocok = true;
                       break; 
                     }
@@ -352,14 +237,18 @@
               });
 
               if (siswaCocok) {
-                // PERBAIKAN: Menyimpan data sesi login siswa ke localStorage agar tidak tertolak cek-login.js
                 localStorage.setItem('infoFun_Nama', namaInput);
                 localStorage.setItem('infoFun_NISN', nisnInput);
 
-                showStatus('Login Siswa berhasil! Mengalihkan...', 'success');
+                showStatus('Login Siswa berhasil! Membuka materi...', 'success');
+                
+                // --- KODE TRANSISI (Menghilangkan login, memunculkan materi) ---
                 setTimeout(() => {
-                  window.location.href = "https://riski902-alt.github.io/TOMBOL-PILIH-KELAS/"; 
-                }, 1000);
+                  loginContainer.classList.add('hidden');
+                  dashboardContainer.classList.remove('hidden');
+                  tampilkanMateri(); // Panggil fungsi JSON
+                }, 800);
+                
               } else {
                 showStatus('Nama tidak cocok dengan NISN yang terdaftar.', 'error');
               }
@@ -369,7 +258,7 @@
               showStatus('Terjadi kesalahan koneksi database.', 'error');
             }
 
-          } else {
+          } else { // Jika Guru
             const emailInput = document.getElementById('email').value.trim();
             const passwordInput = document.getElementById('password').value;
 
@@ -382,14 +271,17 @@
 
             signInWithEmailAndPassword(auth, emailInput, passwordInput)
               .then(() => {
-                // PERBAIKAN: Menyimpan data sesi login guru ke localStorage agar tidak tertolak cek-login.js
                 localStorage.setItem('infoFun_Nama', 'AksesGuru');
                 localStorage.setItem('infoFun_NISN', 'AksesGuru');
 
-                showStatus('Login Guru berhasil! Mengalihkan...', 'success');
+                showStatus('Login Guru berhasil! Membuka materi...', 'success');
+                
+                // --- KODE TRANSISI (Menghilangkan login, memunculkan materi) ---
                 setTimeout(() => {
-                  window.location.href = "https://riski902-alt.github.io/TOMBOL-PILIH-KELAS/"; 
-                }, 1000);
+                  loginContainer.classList.add('hidden');
+                  dashboardContainer.classList.remove('hidden');
+                  tampilkanMateri(); // Panggil fungsi JSON
+                }, 800);
               })
               .catch(() => {
                 showStatus('Email atau password guru salah.', 'error');
