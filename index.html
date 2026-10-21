@@ -325,6 +325,23 @@
           }
         });
       }
+        // =======================================================
+      // MEMBACA PARAMETER URL UNTUK MEMUAT MATERI SECARA OTOMATIS
+      // =======================================================
+      window.addEventListener('DOMContentLoaded', () => {
+          const urlParams = new URLSearchParams(window.location.search);
+          const materiId = urlParams.get('id');
+
+          // Jika ada parameter 'id' di URL, langsung tampilkan materi tersebut
+          if (materiId) {
+              // Menyembunyikan login dan menampilkan dashboard
+              loginContainer.classList.add('hidden');
+              dashboardContainer.classList.remove('hidden');
+              
+              // Memanggil fungsi dengan id dari URL
+              tampilkanMateri(materiId);
+          }
+      });
     </script>
 </body>
 </html>
