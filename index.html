@@ -5,16 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login & Materi - INFORMATIKA FUN</title>
     
-    <!-- Memanggil font dan file CSS/JS milikmu -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- Hapus atau nonaktifkan cek-login.js sementara di file ini agar tidak bentrok dengan proses login -->
     <script src="komponen-atp.js"></script>
 </head>
 <body>
 
     <!-- ========================================== -->
-    <!-- WADAH LOGIN (Tampil Pertama Kali)          -->
+    <!-- WADAH LOGIN                                -->
     <!-- ========================================== -->
     <div id="login-container">
         <div class="login-card">
@@ -27,7 +25,6 @@
             <h1 class="login-title">LOGIN</h1>
             <p class="login-desc">Silakan masuk untuk melanjutkan pembelajaran Informatika.</p>
 
-            <!-- Pilihan Peran -->
             <div class="role-selector">
                 <div class="role-option">
                     <input type="radio" id="roleSiswa" name="userRole" value="siswa">
@@ -39,7 +36,6 @@
                 </div>
             </div>
 
-            <!-- Form Login -->
             <form id="loginForm">
                 <div id="siswaSection" class="form-section">
                     <div class="input-group">
@@ -75,10 +71,9 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- WADAH DASHBOARD MATERI (Awalnya Disembunyikan) -->
+    <!-- WADAH DASHBOARD MATERI                     -->
     <!-- ========================================== -->
     <div id="dashboard-container" class="hidden">
-        
         <div class="page-title-section">
             <div class="page-title-content">
                 <h1 id="tempat-judul-bab" class="chapter-title">Memuat Bab...</h1>
@@ -92,14 +87,12 @@
                     <p>Sedang mengambil data materi, mohon tunggu sebentar...</p>
                 </div>
             </div>
-            <!-- Tombol kembali ke login (opsional) -->
             <button onclick="location.reload()" class="btn-action">Keluar / Kembali</button>
         </div>
-
     </div>
 
     <!-- ========================================== -->
-    <!-- SCRIPT FIREBASE & LOGIKA TRANSISI          -->
+    <!-- SCRIPT FIREBASE & LOGIKA APLIKASI          -->
     <!-- ========================================== -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -120,14 +113,12 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // Elemen Form Login
       const roleInputs = document.querySelectorAll('input[name="userRole"]');
       const siswaSection = document.getElementById('siswaSection');
       const guruSection = document.getElementById('guruSection');
       const statusDiv = document.getElementById('statusMessage');
       const btnLogin = document.getElementById('btnLogin');
 
-      // Elemen Transisi
       const loginContainer = document.getElementById('login-container');
       const dashboardContainer = document.getElementById('dashboard-container');
 
@@ -142,7 +133,6 @@
         if (statusDiv) statusDiv.style.display = 'none';
       }
 
-      // Berpindah antar form Siswa dan Guru
       roleInputs.forEach(input => {
         input.addEventListener('change', (e) => {
           hideStatus();
@@ -157,38 +147,53 @@
       });
 
       // =======================================================
-      // FUNGSI UNTUK MENGAMBIL DATA JSON (Dijalankan pasca-login)
+      // FUNGSI UNTUK MENGAMBIL DAN MENAMPILKAN SEMUA MATERI
       // =======================================================
       async function tampilkanMateri() {
           try {
-              // Kita ambil contoh default menampilkan materi kelas 7 bab 1 pertemuan 1
-              // Jika ingin dinamis, kamu bisa mengubah kunci teks di bawah ini
               const respon = await fetch('materi.json');
               const dataMaster = await respon.json();
               
-              // Contoh kunci materi awal yang dimuat
               const materiPilihan = dataMaster["kelas7-sem1-bab1-pertemuan1"];
 
               if (materiPilihan) {
                   document.getElementById('tempat-judul-bab').innerText = materiPilihan.judul_bab;
                   document.getElementById('tempat-judul-pertemuan').innerText = materiPilihan.judul_pertemuan;
                   
-                  // Secara default menampilkan bagian 'atp'
-                  const kontenMateri = materiPilihan.konten['atp'];
-                  if (typeof buatDesainATP === "function") {
-                      document.getElementById('tempat-isi-materi').innerHTML = buatDesainATP(kontenMateri);
-                  } else {
-                      document.getElementById('tempat-isi-materi').innerHTML = kontenMateri;
+                  const wadahIsiMateri = document.getElementById('tempat-isi-materi');
+                  wadahIsiMateri.innerHTML = ''; 
+
+                  const semuaKonten = materiPilihan.konten;
+                  
+                  for (let namaMenu in semuaKonten) {
+                      let isiMenu = semuaKonten[namaMenu];
+                      
+                      let divBagian = document.createElement('div');
+                      divBagian.style.marginBottom = "30px"; 
+                      
+                      let judulBagian = namaMenu.toUpperCase();
+                      
+                      let htmlKonten = `
+                          <h3 class="section-title" style="color: #1a73e8; margin-bottom: 12px; font-weight: 700;">
+                              📝 ${judulBagian}
+                          </h3>
+                          <div class="${namaMenu}-wrapper" style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0;">
+                              ${isiMenu}
+                          </div>
+                      `;
+                      
+                      divBagian.innerHTML = htmlKonten;
+                      wadahIsiMateri.appendChild(divBagian);
                   }
               }
           } catch (error) {
               console.error("Gagal mengambil materi:", error);
-              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat materi.</p>";
+              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat materi. Pastikan file materi.json tersedia.</p>";
           }
       }
 
       // =======================================================
-      // PROSES LOGIN DAN TRANSISI HALAMAN
+      // PROSES LOGIN DAN TRANSISI
       // =======================================================
       if (btnLogin) {
         btnLogin.addEventListener('click', async (event) => {
@@ -242,11 +247,10 @@
 
                 showStatus('Login Siswa berhasil! Membuka materi...', 'success');
                 
-                // --- KODE TRANSISI (Menghilangkan login, memunculkan materi) ---
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri(); // Panggil fungsi JSON
+                  tampilkanMateri(); 
                 }, 800);
                 
               } else {
@@ -258,7 +262,7 @@
               showStatus('Terjadi kesalahan koneksi database.', 'error');
             }
 
-          } else { // Jika Guru
+          } else { 
             const emailInput = document.getElementById('email').value.trim();
             const passwordInput = document.getElementById('password').value;
 
@@ -276,11 +280,10 @@
 
                 showStatus('Login Guru berhasil! Membuka materi...', 'success');
                 
-                // --- KODE TRANSISI (Menghilangkan login, memunculkan materi) ---
                 setTimeout(() => {
                   loginContainer.classList.add('hidden');
                   dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri(); // Panggil fungsi JSON
+                  tampilkanMateri(); 
                 }, 800);
               })
               .catch(() => {
