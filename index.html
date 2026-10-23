@@ -141,7 +141,7 @@
         if (userRole !== "siswa" && userRole !== "guru") {
             alert("Anda harus login terlebih dahulu untuk mengakses materi ini.");
             const currentId = new URLSearchParams(window.location.search).get('id');
-            window.location.href = `../LOGIN-MATERI/baca-materi.html?redirect=${currentId}`;
+            window.location.href = `../LOGIN-MATERI/index.html?redirect=${currentId}`;
         }
 
         // 2. TAMPILKAN PROFIL DAN TOMBOL LOGOUT
