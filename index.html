@@ -141,7 +141,7 @@
         if (userRole !== "siswa" && userRole !== "guru") {
             alert("Anda harus login terlebih dahulu untuk mengakses materi ini.");
             const currentId = new URLSearchParams(window.location.search).get('id');
-            window.location.href = `../LOGIN-MATERI/index.html?redirect=${currentId}`;
+            window.location.href = `../LOGIN-MATERI/baca-materi.html?redirect=${currentId}`;
         }
 
         // 2. TAMPILKAN PROFIL DAN TOMBOL LOGOUT
@@ -159,7 +159,7 @@
         // Logika Logout
         logoutBtn.addEventListener('click', () => {
             localStorage.clear(); // Hapus memori login jangka panjang
-            window.location.href = "../LOGIN-MATERI/index.html"; // Arahkan kembali ke halaman login
+            window.location.href = "../LOGIN-MATERI/baca-materi.html"; // Arahkan kembali ke halaman login
         });
 
         // 3. IMPORT & KONFIGURASI FIREBASE (Dipertahankan untuk fitur simpan jawaban)
