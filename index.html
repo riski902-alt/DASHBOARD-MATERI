@@ -133,12 +133,40 @@
     <main class="content-area" id="main-content"></main>
 
     <script type="module">
-        // 1. IMPORT FIREBASE AUTH & FIRESTORE
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // 1. CEK LOGIN MELALUI LOCALSTORAGE (PERBAIKAN LANGKAH 3)
+        const userRole = localStorage.getItem("userRole");
+        const userName = localStorage.getItem("userName");
 
-        // 2. KONFIGURASI FIREBASE (Ganti dengan kredensial Firebase milikmu)
+        // Jika bukan siswa dan bukan guru, paksa kembali ke halaman login
+        if (userRole !== "siswa" && userRole !== "guru") {
+            alert("Anda harus login terlebih dahulu untuk mengakses materi ini.");
+            const currentId = new URLSearchParams(window.location.search).get('id');
+            window.location.href = `../LOGIN-MATERI/index.html?redirect=${currentId}`;
+        }
+
+        // 2. TAMPILKAN PROFIL DAN TOMBOL LOGOUT
+        const userNameDisplay = document.getElementById('user-name-display');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (userRole === "siswa") {
+            userNameDisplay.innerText = `Halo, ${userName}`;
+            logoutBtn.style.display = 'inline-block';
+        } else if (userRole === "guru") {
+            userNameDisplay.innerText = `Halo, Guru`;
+            logoutBtn.style.display = 'inline-block';
+        }
+
+        // Logika Logout
+        logoutBtn.addEventListener('click', () => {
+            localStorage.clear(); // Hapus memori login jangka panjang
+            window.location.href = "../LOGIN-MATERI/index.html"; // Arahkan kembali ke halaman login
+        });
+
+        // 3. IMPORT & KONFIGURASI FIREBASE (Dipertahankan untuk fitur simpan jawaban)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        // Ganti dengan kredensial Firebase asli milikmu
         const firebaseConfig = {
             apiKey: "AIzaSyYOUR_API_KEY_HERE",
             authDomain: "databasemateriinformatika.firebaseapp.com",
@@ -149,54 +177,9 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const userNameDisplay = document.getElementById('user-name-display');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        // 3. AMBIL DATA DARI KOLEKSI "siswa" SECARA REAL-TIME
-        async function loadSiswaProfile(uid) {
-            try {
-                // Mengakses koleksi 'siswa' menggunakan UID pengguna sebagai nama dokumen
-                const docRef = doc(db, "siswa", uid);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    // Mengambil field 'namaSiswa' sesuai struktur database Firestore-mu
-                    userNameDisplay.innerText = data.namaSiswa || "Siswa Informatika";
-                } else {
-                    userNameDisplay.innerText = "Siswa Informatika";
-                }
-            } catch (error) {
-                console.error("Error mengambil data siswa:", error);
-                userNameDisplay.innerText = "Siswa Informatika";
-            }
-        }
-
-        // 4. MONITOR STATUS LOGIN REAL-TIME
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Panggil fungsi pengambilan data ke koleksi 'siswa'
-                loadSiswaProfile(user.uid);
-                logoutBtn.style.display = 'inline-block';
-            } else {
-                userNameDisplay.innerText = "Tamu (Belum Login)";
-                logoutBtn.style.display = 'none';
-            }
-        });
-
-        // 5. LOGOUT HANDLER
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                console.log("Siswa berhasil keluar.");
-            }).catch((error) => {
-                console.error("Gagal logout:", error);
-            });
-        });
-
-        // 6. STRUKTUR MENU KONTEN & APLIKASI
+        // 4. STRUKTUR MENU KONTEN & APLIKASI (Kode Asli Anda)
         const learningMenus = [
             { id: "atp", title: "ATP", icon: "ph-target", btnText: "SELESAI DIBACA", 
               html: `<div class="bento-grid"><div class="bento-card highlight"><div class="card-icon-wrapper"><i class="ph-fill ph-flag-checkered"></i></div><h3 class="bento-title">Capaian Pembelajaran</h3><p>Siswa mampu memahami konsep dasar berpikir komputasional.</p></div></div>` },
