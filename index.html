@@ -3,345 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Materi - INFORMATIKA FUN</title>
+    <title>INFORMATIKA FUN! - Ruang Belajar</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <script src="komponen-atp.js"></script>
+    <!-- Import Fonts & Phosphor Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        :root {
+            --bg-main: #4A7298;        
+            --box-bg: #1E3A5F;         
+            --box-border: #88D4AB;     
+            --box-hover: #23436b;      
+            --text-main: #ffffff;      
+            --soft-gold: #D8BD7B;
+            --muted-blue-gray: #B5C2D0;
+            --soft-green: #88D4AB;
+            --status-red: #E57373;
+            --font-title: 'Space Grotesk', sans-serif;
+            --font-nav: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg-main); color: var(--text-main); font-family: var(--font-body); line-height: 1.6; padding-bottom: 50px; overflow-x: hidden; }
+
+        /* HEADER & PROGRES */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background-color: var(--box-bg); border-bottom: 3px solid var(--box-border); }
+        .brand { font-family: var(--font-title); font-weight: 700; color: var(--soft-green); font-size: 1.4rem; display: flex; align-items: center; gap: 16px; }
+        .brand-logo { height: 48px; width: 48px; object-fit: contain; }
+        .user-profile { font-family: var(--font-nav); font-size: 0.9rem; color: var(--soft-gold); display: flex; align-items: center; gap: 8px;}
+
+        /* TOMBOL LOGOUT */
+        .logout-btn {
+            background-color: transparent;
+            color: var(--status-red);
+            border: 1px solid var(--status-red);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-family: var(--font-nav);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-left: 8px;
+            display: none;
+        }
+        .logout-btn:hover { background-color: var(--status-red); color: var(--text-main); }
+
+        .header-section { padding: 30px 5% 10px 5%; display: flex; flex-direction: column; gap: 15px; }
+        .title-box { background-color: var(--box-bg); border: 2px solid var(--box-border); border-radius: 16px; padding: 15px 25px; }
+        .title-header-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+        .page-title { font-family: var(--font-title); font-size: 2.2rem; margin-bottom: 0; flex: 1; line-height: 1.2; }
+        .jp-badge { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ffffff; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; font-family: var(--font-nav); }
+        
+        .meeting-info { margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); display: flex; flex-direction: column; gap: 8px; }
+        .meeting-badge { display: inline-block; background-color: var(--soft-gold); color: var(--box-bg); padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; font-family: var(--font-nav); width: fit-content; }
+        .meeting-desc { font-size: 0.95rem; color: var(--muted-blue-gray); margin: 0; }
+        
+        .progress-box { background-color: var(--box-bg); border: 2px solid var(--box-border); border-radius: 12px; padding: 12px 20px; }
+        .progress-title { display: block; font-family: var(--font-title); font-size: 0.75rem; color: var(--soft-gold); font-weight: bold; margin-bottom: 2px; }
+        .progress-stats { display: block; font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; font-family: var(--font-nav); }
+        .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; }
+        .progress-bar-fill { height: 100%; background: var(--soft-green); width: 0%; transition: width 0.5s ease; }
+
+        /* NAVIGASI */
+        .nav-wrapper { padding: 0 5%; margin-top: 15px; }
+        .nav-container { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 15px; padding-bottom: 15px; }
+        .nav-container::-webkit-scrollbar { height: 6px; }
+        .nav-container::-webkit-scrollbar-thumb { background: var(--soft-green); border-radius: 10px; }
+        
+        .nav-btn { flex: 1; min-width: 180px; background-color: var(--box-bg); color: var(--text-main); border: 2px solid var(--box-border); padding: 12px 10px; border-radius: 30px; font-family: var(--font-nav); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .nav-btn.active { background-color: var(--box-hover); border-color: #ffffff; }
+        .nav-btn.active i { color: var(--soft-green); }
+        .nav-btn.locked { background-color: rgba(30, 58, 95, 0.5); border-color: rgba(136, 212, 171, 0.2); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+        .nav-btn.completed { background-color: var(--soft-green); color: var(--box-bg); border-color: var(--soft-green); }
+        .nav-btn.completed i { color: var(--box-bg); }
+
+        /* KONTEN (TABS) */
+        .content-area { padding: 20px 5% 30px 5%; }
+        .tab-content { display: none; flex-direction: column; gap: 20px; }
+        .tab-content.active { display: flex; }
+
+        .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; }
+        .bento-card { background-color: var(--box-bg); border: 2px solid var(--box-border); border-radius: 16px; padding: 30px; }
+        .card-icon-wrapper { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background-color: rgba(136, 212, 171, 0.15); color: var(--soft-green); font-size: 26px; margin-bottom: 15px; }
+        .bento-card.highlight { background-color: var(--soft-green); border-color: var(--text-main); color: var(--box-bg); }
+        .bento-title { font-family: var(--font-title); font-size: 1.3rem; margin-bottom: 12px; font-weight: 700; }
+
+        /* TOMBOL AKSI */
+        .action-button { align-self: flex-end; background-color: var(--soft-gold); color: var(--box-bg); border: none; padding: 12px 30px; border-radius: 8px; font-family: var(--font-nav); font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .action-button:disabled { background-color: #3b5a7a; color: #8bb3d4; cursor: not-allowed; }
+    </style>
 </head>
 <body>
 
-    <!-- ========================================== -->
-    <!-- WADAH LOGIN                                -->
-    <!-- ========================================== -->
-    <div id="login-container">
-        <div class="login-card">
-            <div class="header-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/>
-                </svg>
+    <header class="top-bar">
+        <div class="brand">
+            <img src="https://cdn.phototourl.com/member/2026-10-20-301bf8f0-f5cd-4de0-a3fd-b9b3a2d0e3e0.png" alt="Logo" class="brand-logo" onerror="this.style.display='none'">
+            INFORMATIKA FUN!
+        </div>
+        <div class="user-profile">
+            <span id="user-name-display">Memuat nama...</span>
+            <i class="ph-fill ph-user-circle" style="font-size: 1.5rem;"></i>
+            <button id="logout-btn" class="logout-btn">Keluar</button>
+        </div>
+    </header>
+
+    <section class="header-section">
+        <div class="title-box">
+            <div class="title-header-row">
+                <h1 class="page-title">Bab 1: Berpikir Komputasional</h1>
+                <div class="jp-badge">JP: 120 MENIT</div>
             </div>
-
-            <h1 class="login-title">LOGIN</h1>
-            <p class="login-desc">Silakan masuk untuk melanjutkan pembelajaran Informatika.</p>
-
-            <div class="role-selector">
-                <div class="role-option">
-                    <input type="radio" id="roleSiswa" name="userRole" value="siswa">
-                    <label for="roleSiswa" class="role-label">Siswa</label>
-                </div>
-                <div class="role-option">
-                    <input type="radio" id="roleGuru" name="userRole" value="guru" checked>
-                    <label for="roleGuru" class="role-label">Guru</label>
-                </div>
-            </div>
-
-            <form id="loginForm">
-                <div id="siswaSection" class="form-section">
-                    <div class="input-group">
-                        <label for="nama">Nama Lengkap</label>
-                        <input type="text" id="nama" class="input-field" placeholder="Masukkan nama lengkap">
-                    </div>
-                    <div class="input-group">
-                        <label for="nisn">NISN</label>
-                        <input type="text" id="nisn" class="input-field" placeholder="Masukkan NISN" inputmode="numeric">
-                    </div>
-                </div>
-
-                <div id="guruSection" class="form-section active">
-                    <div class="input-group">
-                        <label for="email">Email Guru</label>
-                        <input type="email" id="email" class="input-field" placeholder="Masukkan email guru">
-                    </div>
-                    <div class="input-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" class="input-field" placeholder="Masukkan password">
-                    </div>
-                </div>
-
-                <button type="submit" id="btnLogin" class="btn-login-submit">LOGIN</button>
-                <div id="statusMessage" class="status-message"></div>
-            </form>
-
-            <div class="card-footer">
-                <p class="footer-title">INFORMATIKA FUN</p>
-                <p class="footer-desc">By: Riski Amalia, S.Pd</p>
+            <div class="meeting-info">
+                <span class="meeting-badge">Pertemuan 1</span>
+                <p class="meeting-desc">Pada pertemuan ini, kita akan mengeksplorasi langkah-langkah dasar berpikir komputasional untuk memecahkan masalah sistematis.</p>
             </div>
         </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- WADAH DASHBOARD MATERI                     -->
-    <!-- ========================================== -->
-    <div id="dashboard-container" class="hidden">
         
-        <!-- Tombol Navigasi Kelas -->
-        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
-            <button id="btn-kelas7" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 7</button>
-            <button id="btn-kelas8" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 8</button>
-            <button id="btn-kelas9" class="btn-action" style="background-color: #1a73e8; color: white;">Materi Kelas 9</button>
+        <div class="progress-box">
+            <span class="progress-title">PROGRES PEMBELAJARAN</span>
+            <span id="progress-text" class="progress-stats">0 dari 7 menu selesai (0%)</span>
+            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
         </div>
+    </section>
 
-        <div class="page-title-section">
-            <div class="page-title-content">
-                <h1 id="tempat-judul-bab" class="chapter-title">Memuat Bab...</h1>
-                <h2 id="tempat-judul-pertemuan" class="meeting-title">Memuat Pertemuan...</h2>
-            </div>
-        </div>
+    <nav class="nav-wrapper"><div class="nav-container" id="menu-container"></div></nav>
+    <main class="content-area" id="main-content"></main>
 
-        <div class="main-content-area">
-            <div class="content-card">
-                <div id="tempat-isi-materi" class="materi-content">
-                    <p>Sedang mengambil data materi, mohon tunggu sebentar...</p>
-                </div>
-            </div>
-            <button onclick="location.reload()" class="btn-action" style="background-color: #dc3545; color: white; margin-top: 20px;">Keluar / Kembali</button>
-        </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- SCRIPT FIREBASE & LOGIKA APLIKASI          -->
-    <!-- ========================================== -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-      import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-      import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // 1. IMPORT FIREBASE AUTH & FIRESTORE
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyB7bt1JBOXkh81nYk8sVkuFpSmuJ3kOj94",
-        authDomain: "databasemateriinformatika.firebaseapp.com",
-        projectId: "databasemateriinformatika",
-        storageBucket: "databasemateriinformatika.firebasestorage.app",
-        messagingSenderId: "961327810612",
-        appId: "1:961327810612:web:48e952f20159a5b932e261",
-        measurementId: "G-TDZQZ9L36B"
-      };
+        // 2. KONFIGURASI FIREBASE (Ganti dengan kredensial Firebase milikmu)
+        const firebaseConfig = {
+            apiKey: "AIzaSyYOUR_API_KEY_HERE",
+            authDomain: "databasemateriinformatika.firebaseapp.com",
+            projectId: "databasemateriinformatika",
+            storageBucket: "databasemateriinformatika.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
 
-      const app = initializeApp(firebaseConfig);
-      const auth = getAuth(app);
-      const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
 
-      const roleInputs = document.querySelectorAll('input[name="userRole"]');
-      const siswaSection = document.getElementById('siswaSection');
-      const guruSection = document.getElementById('guruSection');
-      const statusDiv = document.getElementById('statusMessage');
-      const btnLogin = document.getElementById('btnLogin');
+        const userNameDisplay = document.getElementById('user-name-display');
+        const logoutBtn = document.getElementById('logout-btn');
 
-      const loginContainer = document.getElementById('login-container');
-      const dashboardContainer = document.getElementById('dashboard-container');
-
-      function showStatus(message, type) {
-        if (!statusDiv) return;
-        statusDiv.innerText = message;
-        statusDiv.style.display = 'block';
-        statusDiv.className = type === 'error' ? 'status-message status-error' : 'status-message status-success';
-      }
-
-      function hideStatus() {
-        if (statusDiv) statusDiv.style.display = 'none';
-      }
-
-      roleInputs.forEach(input => {
-        input.addEventListener('change', (e) => {
-          hideStatus();
-          if (e.target.value === 'siswa') {
-            siswaSection.classList.add('active');
-            guruSection.classList.remove('active');
-          } else {
-            guruSection.classList.add('active');
-            siswaSection.classList.remove('active');
-          }
-        });
-      });
-
-      // =======================================================
-      // FUNGSI UNTUK MENGAMBIL MATERI SECARA DINAMIS
-      // =======================================================
-      async function tampilkanMateri(kunciMateri) {
-          try {
-              document.getElementById('tempat-isi-materi').innerHTML = "<p>Sedang memuat materi, mohon tunggu...</p>";
-              
-              const respon = await fetch('materi.json');
-              const dataMaster = await respon.json();
-              
-              const materiPilihan = dataMaster[kunciMateri];
-
-              if (materiPilihan) {
-                  document.getElementById('tempat-judul-bab').innerText = materiPilihan.judul_bab;
-                  document.getElementById('tempat-judul-pertemuan').innerText = materiPilihan.judul_pertemuan;
-                  
-                  const wadahIsiMateri = document.getElementById('tempat-isi-materi');
-                  wadahIsiMateri.innerHTML = ''; 
-
-                  const semuaKonten = materiPilihan.konten;
-                  
-                  for (let namaMenu in semuaKonten) {
-                      let isiMenu = semuaKonten[namaMenu];
-                      
-                      // Menggunakan fungsi desain ATP jika menu yang dibaca adalah 'atp'
-                      if (namaMenu === 'atp' && typeof buatDesainATP === 'function') {
-                          isiMenu = buatDesainATP(isiMenu);
-                      }
-                      
-                      let divBagian = document.createElement('div');
-                      divBagian.style.marginBottom = "30px"; 
-                      
-                      let judulBagian = namaMenu.toUpperCase();
-                      
-                      let htmlKonten = `
-                          <h3 class="section-title" style="color: #1a73e8; margin-bottom: 12px; font-weight: 700;">
-                              📝 ${judulBagian}
-                          </h3>
-                          <div class="${namaMenu}-wrapper" style="background: #f8f9fa; padding: 20px; border-radius: 12px; border: 1px solid #e0e0e0;">
-                              ${isiMenu}
-                          </div>
-                      `;
-                      
-                      divBagian.innerHTML = htmlKonten;
-                      wadahIsiMateri.appendChild(divBagian);
-                  }
-              } else {
-                  document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Materi untuk kelas ini belum tersedia di JSON.</p>";
-              }
-          } catch (error) {
-              console.error("Gagal mengambil materi:", error);
-              document.getElementById('tempat-isi-materi').innerHTML = "<p class='status-error'>Terjadi kesalahan saat memuat file materi.json.</p>";
-          }
-      }
-
-      // =======================================================
-      // EVENT LISTENER UNTUK TOMBOL NAVIGASI KELAS
-      // Kunci disesuaikan dengan file materi.json
-      // =======================================================
-      document.getElementById('btn-kelas7').addEventListener('click', () => {
-          tampilkanMateri("kelas7-sem1-bab1-pertemuan1");
-      });
-      
-      document.getElementById('btn-kelas8').addEventListener('click', () => {
-          tampilkanMateri("kelas8-sem1-bab1-pertemuan1");
-      });
-      
-      document.getElementById('btn-kelas9').addEventListener('click', () => {
-          tampilkanMateri("kelas9-sem1-bab1-pertemuan1");
-      });
-
-      // =======================================================
-      // PROSES LOGIN DAN TRANSISI
-      // =======================================================
-      if (btnLogin) {
-        btnLogin.addEventListener('click', async (event) => {
-          event.preventDefault();
-          const selectedRole = document.querySelector('input[name="userRole"]:checked').value;
-
-          if (selectedRole === 'siswa') {
-            const namaInput = document.getElementById('nama').value.trim();
-            const nisnInput = document.getElementById('nisn').value.trim();
-
-            if (namaInput === '' || nisnInput === '') {
-              showStatus('Nama dan NISN wajib diisi.', 'error');
-              return;
-            }
-
-            showStatus('Memeriksa data siswa...', 'success');
-
+        // 3. AMBIL DATA DARI KOLEKSI "siswa" SECARA REAL-TIME
+        async function loadSiswaProfile(uid) {
             try {
-              let q = query(collection(db, "siswa"), where("NISN", "==", nisnInput));
-              let querySnapshot = await getDocs(q);
+                // Mengakses koleksi 'siswa' menggunakan UID pengguna sebagai nama dokumen
+                const docRef = doc(db, "siswa", uid);
+                const docSnap = await getDoc(docRef);
 
-              if (querySnapshot.empty) {
-                const nisnAngka = Number(nisnInput);
-                q = query(collection(db, "siswa"), where("NISN", "==", nisnAngka));
-                querySnapshot = await getDocs(q);
-              }
-
-              if (querySnapshot.empty) {
-                showStatus('NISN tidak terdaftar di database.', 'error');
-                return;
-              }
-
-              let siswaCocok = false;
-              querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                for (let kolom in data) {
-                  let namaKolomBersih = kolom.trim().toLowerCase().replace(/_/g, "");
-                  if (namaKolomBersih.includes("nama")) {
-                    let isiNamaDatabase = data[kolom];
-                    if (typeof isiNamaDatabase === "string" && isiNamaDatabase.trim().toLowerCase() === namaInput.toLowerCase()) {
-                      siswaCocok = true;
-                      break; 
-                    }
-                  }
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    // Mengambil field 'namaSiswa' sesuai struktur database Firestore-mu
+                    userNameDisplay.innerText = data.namaSiswa || "Siswa Informatika";
+                } else {
+                    userNameDisplay.innerText = "Siswa Informatika";
                 }
-              });
-
-              if (siswaCocok) {
-                localStorage.setItem('infoFun_Nama', namaInput);
-                localStorage.setItem('infoFun_NISN', nisnInput);
-
-                showStatus('Login Siswa berhasil! Membuka materi...', 'success');
-                
-                setTimeout(() => {
-                  loginContainer.classList.add('hidden');
-                  dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
-                }, 800);
-                
-              } else {
-                showStatus('Nama tidak cocok dengan NISN yang terdaftar.', 'error');
-              }
-
             } catch (error) {
-              console.error("Error Database:", error);
-              showStatus('Terjadi kesalahan koneksi database.', 'error');
+                console.error("Error mengambil data siswa:", error);
+                userNameDisplay.innerText = "Siswa Informatika";
             }
+        }
 
-          } else { 
-            const emailInput = document.getElementById('email').value.trim();
-            const passwordInput = document.getElementById('password').value;
-
-            if (emailInput === '' || passwordInput === '') {
-              showStatus('Email dan password belum diisi.', 'error');
-              return;
+        // 4. MONITOR STATUS LOGIN REAL-TIME
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Panggil fungsi pengambilan data ke koleksi 'siswa'
+                loadSiswaProfile(user.uid);
+                logoutBtn.style.display = 'inline-block';
+            } else {
+                userNameDisplay.innerText = "Tamu (Belum Login)";
+                logoutBtn.style.display = 'none';
             }
-
-            showStatus('Memeriksa akun Guru...', 'success');
-
-            signInWithEmailAndPassword(auth, emailInput, passwordInput)
-              .then(() => {
-                localStorage.setItem('infoFun_Nama', 'AksesGuru');
-                localStorage.setItem('infoFun_NISN', 'AksesGuru');
-
-                showStatus('Login Guru berhasil! Membuka materi...', 'success');
-                
-                setTimeout(() => {
-                  loginContainer.classList.add('hidden');
-                  dashboardContainer.classList.remove('hidden');
-                  tampilkanMateri("kelas7-sem1-bab1-pertemuan1"); 
-                }, 800);
-              })
-              .catch(() => {
-                showStatus('Email atau password guru salah.', 'error');
-              });
-          }
         });
-      }
-        // =======================================================
-      // MEMBACA PARAMETER URL UNTUK MEMUAT MATERI SECARA OTOMATIS
-      // =======================================================
-      window.addEventListener('DOMContentLoaded', () => {
-          const urlParams = new URLSearchParams(window.location.search);
-          const materiId = urlParams.get('id');
 
-          // Jika ada parameter 'id' di URL, langsung tampilkan materi tersebut
-          if (materiId) {
-              // Menyembunyikan login dan menampilkan dashboard
-              loginContainer.classList.add('hidden');
-              dashboardContainer.classList.remove('hidden');
-              
-              // Memanggil fungsi dengan id dari URL
-              tampilkanMateri(materiId);
-          }
-      });
+        // 5. LOGOUT HANDLER
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                console.log("Siswa berhasil keluar.");
+            }).catch((error) => {
+                console.error("Gagal logout:", error);
+            });
+        });
+
+        // 6. STRUKTUR MENU KONTEN & APLIKASI
+        const learningMenus = [
+            { id: "atp", title: "ATP", icon: "ph-target", btnText: "SELESAI DIBACA", 
+              html: `<div class="bento-grid"><div class="bento-card highlight"><div class="card-icon-wrapper"><i class="ph-fill ph-flag-checkered"></i></div><h3 class="bento-title">Capaian Pembelajaran</h3><p>Siswa mampu memahami konsep dasar berpikir komputasional.</p></div></div>` },
+            { id: "asesmen-awal", title: "ASESMEN AWAL", icon: "ph-clipboard-text", btnText: "KIRIM JAWABAN", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Kuis Diagnostik</h3><input type="text" placeholder="Ketik jawabanmu..." style="width:100%; padding:10px; border-radius:8px;"></div></div>` },
+            { id: "pertanyaan-esensial", title: "PERTANYAAN ESENSIAL", icon: "ph-lightbulb", btnText: "KIRIM JAWABAN", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Pemantik</h3><p>Bagaimana cara komputer bekerja?</p></div></div>` },
+            { id: "eksplorasi-konsep", title: "EKSPLORASI KONSEP", icon: "ph-compass", btnText: "SELESAI DIBACA", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Bahan Bacaan</h3><p>Silakan baca modul.</p></div></div>` },
+            { id: "for-learning", title: "FOR LEARNING", icon: "ph-chats-circle", btnText: "KIRIM JAWABAN", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Diskusi</h3><textarea rows="3" style="width:100%; padding:10px; border-radius:8px;"></textarea></div></div>` },
+            { id: "penerapan-konsep", title: "PENERAPAN KONSEP", icon: "ph-laptop", btnText: "KIRIM JAWABAN", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Praktek</h3><p>Praktek Scratch.</p></div></div>` },
+            { id: "as-learning", title: "AS LEARNING", icon: "ph-brain", btnText: "KIRIM JAWABAN", 
+              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Refleksi</h3><input type="text" style="width:100%; padding:10px; border-radius:8px;"></div></div>` }
+        ];
+
+        let userProgress = { "atp": 1, "asesmen-awal": 0, "pertanyaan-esensial": 0, "eksplorasi-konsep": 0, "for-learning": 0, "penerapan-konsep": 0, "as-learning": 0 };
+        let currentActiveMenuId = "atp";
+
+        const menuContainer = document.getElementById('menu-container');
+        const mainContent = document.getElementById('main-content');
+        
+        function initContent() {
+            mainContent.innerHTML = ''; 
+            learningMenus.forEach(menu => {
+                const section = document.createElement('div');
+                section.className = `tab-content ${menu.id === currentActiveMenuId ? 'active' : ''}`;
+                section.id = `content-${menu.id}`;
+                section.innerHTML = menu.html;
+
+                const actionBtn = document.createElement('button');
+                actionBtn.className = 'action-button';
+                actionBtn.id = `btn-${menu.id}`;
+                actionBtn.innerHTML = `${menu.btnText}`;
+                actionBtn.onclick = () => completeCurrentMenu(menu.id);
+                
+                section.appendChild(actionBtn);
+                mainContent.appendChild(section);
+            });
+        }
+
+        function renderMenu() {
+            menuContainer.innerHTML = '';
+            learningMenus.forEach(menu => {
+                const btn = document.createElement('button');
+                btn.className = `nav-btn ${menu.id === currentActiveMenuId ? 'active' : ''}`;
+                
+                if (userProgress[menu.id] === 0) {
+                    btn.classList.add('locked');
+                } else if (userProgress[menu.id] === 2) {
+                    btn.classList.add('completed');
+                }
+                
+                btn.innerHTML = `<i class="ph-fill ${menu.icon}"></i> <span>${menu.title}</span>`;
+                btn.addEventListener('click', () => { if (userProgress[menu.id] !== 0) switchTab(menu.id); });
+                menuContainer.appendChild(btn);
+            });
+            updateProgressUI();
+        }
+
+        function switchTab(menuId) {
+            currentActiveMenuId = menuId;
+            renderMenu();
+            
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`content-${menuId}`).classList.add('active');
+        }
+
+        function completeCurrentMenu(menuId) {
+            userProgress[menuId] = 2; 
+            
+            const actionBtn = document.getElementById(`btn-${menuId}`);
+            actionBtn.innerHTML = `<i class="ph-fill ph-check"></i> SELESAI`;
+            actionBtn.disabled = true;
+
+            const currentIndex = learningMenus.findIndex(m => m.id === menuId);
+            if (currentIndex < learningMenus.length - 1) {
+                const nextMenuId = learningMenus[currentIndex + 1].id;
+                if (userProgress[nextMenuId] === 0) userProgress[nextMenuId] = 1; 
+                switchTab(nextMenuId); 
+            } else {
+                switchTab(menuId);
+            }
+        }
+
+        function updateProgressUI() {
+            const selesai = Object.values(userProgress).filter(v => v === 2).length;
+            const total = learningMenus.length;
+            const persentase = Math.round((selesai / total) * 100);
+            document.getElementById('progress-text').innerText = `${selesai} dari ${total} menu selesai (${persentase}%)`;
+            document.getElementById('progress-fill').style.width = `${persentase}%`;
+        }
+
+        initContent();
+        renderMenu();
+        switchTab(currentActiveMenuId);
     </script>
 </body>
 </html>
