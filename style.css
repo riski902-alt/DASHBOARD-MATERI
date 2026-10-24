@@ -258,3 +258,90 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
     .atp-journey-steps { flex-direction: column; gap: 30px; }
     .atp-journey-line { top: 20px; bottom: 20px; left: 50%; right: auto; width: 3px; height: auto; transform: translateX(-50%); background: repeating-linear-gradient(180deg, var(--denim-blue) 0, var(--denim-blue) 8px, transparent 8px, transparent 16px); }
 }
+
+/* Konfigurasi Warna Tema Utama */
+:root {
+    --menu-bg-normal: rgba(255, 255, 255, 0.1);
+    --menu-border: rgba(255, 255, 255, 0.2);
+    --menu-text: #ffffff;
+    --menu-active: #3B82F6; /* Biru muda */
+    --menu-completed: #10B981; /* Hijau lembut */
+    --menu-locked: rgba(255, 255, 255, 0.05);
+    --bg-denim: #152C5B;
+    --bg-navy: #0A192F;
+}
+
+/* Container Bento Grid Horizontal */
+.learning-menu-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 15px 5px;
+    -webkit-overflow-scrolling: touch; /* Halus di iOS */
+    scrollbar-width: thin;
+}
+
+/* Desain Dasar Tombol (Glassmorphism) */
+.menu-btn {
+    flex: 0 0 auto;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background: var(--menu-bg-normal);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--menu-border);
+    border-radius: 16px; /* Sudut membulat modern */
+    color: var(--menu-text);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.menu-icon i { font-size: 28px; margin-bottom: 8px; }
+.menu-text { font-family: var(--font-nav, 'Inter', sans-serif); font-size: 0.85rem; font-weight: 600; text-align: center; }
+.menu-status { position: absolute; top: 8px; right: 8px; font-size: 14px; }
+
+/* STATE 1: Terkunci (Locked) */
+.menu-btn.locked {
+    background: var(--menu-locked);
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: transparent;
+}
+.menu-btn.locked .menu-icon { filter: grayscale(100%); opacity: 0.5; }
+
+/* STATE 2: Tersedia (Available / Hover) */
+.menu-btn:not(.locked):hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+.menu-btn:not(.locked):active { transform: scale(0.96); }
+
+/* STATE 3: Sedang Dibuka (Active) */
+.menu-btn.active {
+    border: 2px solid var(--menu-active);
+    background: rgba(59, 130, 246, 0.15);
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+.menu-btn.active .menu-icon i { color: var(--menu-active); }
+
+/* STATE 4: Selesai (Completed) */
+.menu-btn.completed {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--menu-completed);
+}
+.menu-btn.completed .menu-icon i { color: var(--menu-completed); }
+.menu-btn.completed .menu-status { color: var(--menu-completed); }
+
+/* Responsivitas Layar Sempit */
+@media (max-width: 768px) {
+    .menu-btn { min-width: 120px; padding: 12px 8px; }
+    .menu-icon i { font-size: 24px; }
+    .menu-text { font-size: 0.75rem; }
+}
