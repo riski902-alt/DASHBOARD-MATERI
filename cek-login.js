@@ -1,17 +1,41 @@
 // ==========================================
 // File: cek-login.js
-// Tujuan: Memastikan NAMA LENGKAP siswa yang tampil (bukan NISN angka)
+// Tujuan: Mendukung Login Siswa & Login Guru secara bersamaan
 // ==========================================
 
-// Fungsi pembantu untuk mengecek apakah teks hanya berupa angka (NISN)
+// Helper: Cek apakah string hanya berisi angka
 function apakahHanyaAngka(teks) {
     if (!teks) return false;
     return /^\d+$/.test(teks.toString().trim());
 }
 
-// 1. Fungsi pintar mencari NAMA LENGKAP siswa
-function dapatkanNamaSiswa() {
-    // A. Cek dari Parameter URL (jika dikirim saat pengalihan login)
+// 1. Deteksi Peran (Role): 'guru' atau 'siswa'
+function dapatkanRoleUser() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const roleDariUrl = urlParams.get('role') || urlParams.get('user_role');
+    
+    if (roleDariUrl) {
+        const roleClean = roleDariUrl.toLowerCase().trim();
+        localStorage.setItem('infoFun_Role', roleClean);
+        return roleClean;
+    }
+
+    const roleDisimpan = localStorage.getItem('infoFun_Role') || 
+                         localStorage.getItem('role') || 
+                         localStorage.getItem('user_role');
+
+    if (roleDisimpan) return roleDisimpan.toLowerCase().trim();
+
+    // Jika ada penanda email Guru di localStorage, set otomatis sebagai guru
+    if (localStorage.getItem('infoFun_Email') || localStorage.getItem('guru_email')) {
+        return 'guru';
+    }
+
+    return 'siswa'; // Default role
+}
+
+// 2. Fungsi Pembaca Nama User (Siswa / Guru)
+function dapatkanNamaUser() {
     const urlParams = new URLSearchParams(window.location.search);
     const namaUrl = urlParams.get('nama') || urlParams.get('namaLengkap') || urlParams.get('nama_siswa');
     
@@ -23,28 +47,13 @@ function dapatkanNamaSiswa() {
         }
     }
 
-    // B. Cek Kunci Prioritas Utama di LocalStorage
-    const kunciNama = ['infoFun_Nama', 'namaLengkap', 'nama_siswa', 'nama', 'currentUser', 'user_nama'];
+    const kunciNama = ['infoFun_Nama', 'namaLengkap', 'nama_siswa', 'nama', 'currentUser', 'user_nama', 'guru_nama'];
     
     for (const kunci of kunciNama) {
         const val = localStorage.getItem(kunci);
         if (val && val !== 'undefined' && val !== 'null' && val.trim() !== '') {
             const nilaiBersih = val.trim();
-            // Pastikan BUKAN angka NISN
             if (!apakahHanyaAngka(nilaiBersih)) {
-                return nilaiBersih;
-            }
-        }
-    }
-
-    // C. Pindai Otomatis Kunci Lain di LocalStorage (Jika nama kunci berbeda)
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const val = localStorage.getItem(key);
-        
-        if (val && val !== 'undefined' && val !== 'null' && val.trim() !== '') {
-            const nilaiBersih = val.trim();
-            if ((key.toLowerCase().includes('nama') || key.toLowerCase().includes('user')) && !apakahHanyaAngka(nilaiBersih)) {
                 return nilaiBersih;
             }
         }
@@ -53,7 +62,7 @@ function dapatkanNamaSiswa() {
     return null;
 }
 
-// 2. Fungsi pembaca NISN siswa
+// 3. Fungsi Pembaca NISN Siswa
 function dapatkanNISNSiswa() {
     const urlParams = new URLSearchParams(window.location.search);
     const nisnUrl = urlParams.get('nisn') || urlParams.get('user_nisn');
@@ -71,37 +80,44 @@ function dapatkanNISNSiswa() {
         }
     }
 
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.toLowerCase().includes('nisn')) {
-            const val = localStorage.getItem(key);
-            if (val && val !== 'undefined' && val !== 'null') return val.trim();
-        }
-    }
-
     return null;
 }
 
-// 3. Konfigurasi Keamanan & Redirect Login
+// 4. Logika Validasi Akses
 const loginUrlLengkap = "https://riski902-alt.github.io/LOGIN-MATERI/";
-const namaSiswa = dapatkanNamaSiswa();
+const roleUser = dapatkanRoleUser();
+const namaUser = dapatkanNamaUser();
 const nisnSiswa = dapatkanNISNSiswa();
 
-if ((!namaSiswa || !nisnSiswa) && !window.location.href.includes("LOGIN-MATERI")) {
+let isLoginValid = false;
+
+if (roleUser === 'guru') {
+    // Untuk Guru: Cukup ada sesi/nama Guru (tidak memerlukan NISN)
+    isLoginValid = !!namaUser || !!localStorage.getItem('infoFun_Email') || !!localStorage.getItem('guru_email');
+} else {
+    // Untuk Siswa: Wajib ada Nama DAN NISN (Sesuai sistem siswa yang sudah berhasil)
+    isLoginValid = !!namaUser && !!nisnSiswa;
+}
+
+// Pengalihan jika belum login
+if (!isLoginValid && !window.location.href.includes("LOGIN-MATERI")) {
     alert("Kamu belum login! Silakan login terlebih dahulu untuk mengakses materi.");
     window.location.href = loginUrlLengkap;
 }
 
-// 4. Tampilkan Nama Lengkap pada Header setelah DOM Siap
+// 5. Tampilkan Nama pada Header Dashboard setelah DOM Dimuat
 document.addEventListener("DOMContentLoaded", () => {
     const userNameDisplay = document.getElementById('user-name-display');
     const logoutBtn = document.getElementById('logout-btn');
 
-    const namaLengkapAktif = dapatkanNamaSiswa();
+    const namaAktif = dapatkanNamaUser();
+    const roleAktif = dapatkanRoleUser();
 
     if (userNameDisplay) {
-        if (namaLengkapAktif) {
-            userNameDisplay.innerText = namaLengkapAktif;
+        if (namaAktif) {
+            userNameDisplay.innerText = roleAktif === 'guru' ? `[Guru] ${namaAktif}` : namaAktif;
+        } else if (roleAktif === 'guru') {
+            userNameDisplay.innerText = "Guru Informatika";
         } else {
             userNameDisplay.innerText = "Siswa Informatika";
         }
