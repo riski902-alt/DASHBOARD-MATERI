@@ -8,8 +8,8 @@
     <!-- Import Fonts & Phosphor Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-	<script src="menu-handler.js"></script>
-	  
+    <script src="menu-handler.js"></script>
+      
     <!-- TAMBAHKAN BARIS INI UNTUK MEMANGGIL FILE style.css -->
     <link rel="stylesheet" href="style.css">
         
@@ -77,27 +77,14 @@
         .nav-container::-webkit-scrollbar { height: 6px; }
         .nav-container::-webkit-scrollbar-thumb { background: var(--soft-green); border-radius: 10px; }
         
-        .nav-btn { flex: 1; min-width: 180px; background-color: var(--box-bg); color: var(--text-main); border: 2px solid var(--box-border); padding: 12px 10px; border-radius: 30px; font-family: var(--font-nav); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .nav-btn.active { background-color: var(--box-hover); border-color: #ffffff; }
-        .nav-btn.active i { color: var(--soft-green); }
-        .nav-btn.locked { background-color: rgba(30, 58, 95, 0.5); border-color: rgba(136, 212, 171, 0.2); color: rgba(255,255,255,0.4); cursor: not-allowed; }
-        .nav-btn.completed { background-color: var(--soft-green); color: var(--box-bg); border-color: var(--soft-green); }
-        .nav-btn.completed i { color: var(--box-bg); }
+        .menu-btn { flex: 1; min-width: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px; background-color: #152C5B; border: 1px solid var(--box-border); border-radius: 8px; color: var(--text-main); cursor: pointer; }
+        .menu-btn.locked { background-color: rgba(30, 58, 95, 0.5); border-color: rgba(136, 212, 171, 0.2); color: rgba(255,255,255,0.4); cursor: not-allowed; }
+        .learning-menu-container { display: flex; width: 100%; gap: 15px; overflow-x: auto; margin-top: 15px; }
 
         /* KONTEN (TABS) */
         .content-area { padding: 20px 5% 30px 5%; }
         .tab-content { display: none; flex-direction: column; gap: 20px; }
         .tab-content.active { display: flex; }
-
-        .bento-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; width: 100%; }
-        .bento-card { background-color: var(--box-bg); border: 2px solid var(--box-border); border-radius: 16px; padding: 30px; }
-        .card-icon-wrapper { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 12px; background-color: rgba(136, 212, 171, 0.15); color: var(--soft-green); font-size: 26px; margin-bottom: 15px; }
-        .bento-card.highlight { background-color: var(--soft-green); border-color: var(--text-main); color: var(--box-bg); }
-        .bento-title { font-family: var(--font-title); font-size: 1.3rem; margin-bottom: 12px; font-weight: 700; }
-
-        /* TOMBOL AKSI */
-        .action-button { align-self: flex-end; background-color: var(--soft-gold); color: var(--box-bg); border: none; padding: 12px 30px; border-radius: 8px; font-family: var(--font-nav); font-size: 1rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .action-button:disabled { background-color: #3b5a7a; color: #8bb3d4; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -117,251 +104,150 @@
     <section class="header-section">
         <div class="title-box">
             <div class="title-header-row">
-    <!-- Tambahkan id="judul-bab" di sini -->
-    <h1 class="page-title" id="judul-bab">Bab 1: Berpikir Komputasional</h1>
-    <div class="jp-badge">JP: 120 MENIT</div>
-</div>
-<div class="meeting-info">
-    <!-- Tambahkan id="pertemuan-info" di sini -->
-    <span class="meeting-badge" id="pertemuan-info">Pertemuan 1</span>
-	
-</div>
-        
-        <div class="progress-box">
-            <span class="progress-title">PROGRES PEMBELAJARAN</span>
-            <span id="progress-text" class="progress-stats">0 dari 7 menu selesai (0%)</span>
-            <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+                <h1 class="page-title" id="judul-bab">Bab 1: Berpikir Komputasional</h1>
+                <div class="jp-badge">JP: 120 MENIT</div>
+            </div>
+            <div class="meeting-info">
+                <span class="meeting-badge" id="pertemuan-info">Pertemuan 1</span>
+            </div>
+            
+            <div class="progress-box">
+                <span class="progress-title">PROGRES PEMBELAJARAN</span>
+                <span id="progress-text" class="progress-stats">0 dari 7 menu selesai (0%)</span>
+                <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+            </div>
+
+            <!-- KOTAK MENU -->
+            <nav class="learning-menu-container">
+                <button class="menu-btn" onclick="switchTab('atp')" id="btn-atp">
+                    <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
+                    <span class="menu-text">ATP</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('asesmen-awal')" id="btn-asesmen-awal">
+                    <div class="menu-icon"><i class="ph ph-clipboard-text"></i></div>
+                    <span class="menu-text">Asesmen Awal</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('pertanyaan-esensial')" id="btn-pertanyaan-esensial">
+                    <div class="menu-icon"><i class="ph ph-lightbulb"></i></div>
+                    <span class="menu-text">Pertanyaan Esensial</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('eksplorasi-konsep')" id="btn-eksplorasi-konsep">
+                    <div class="menu-icon"><i class="ph ph-monitor-play"></i></div>
+                    <span class="menu-text">Eksplorasi Konsep</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('for-learning')" id="btn-for-learning">
+                    <div class="menu-icon"><i class="ph ph-target"></i></div>
+                    <span class="menu-text">For Learning</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('penerapan-konsep')" id="btn-penerapan-konsep">
+                    <div class="menu-icon"><i class="ph ph-laptop"></i></div>
+                    <span class="menu-text">Penerapan Konsep</span>
+                </button>
+
+                <button class="menu-btn" onclick="switchTab('as-learning')" id="btn-as-learning">
+                    <div class="menu-icon"><i class="ph ph-brain"></i></div>
+                    <span class="menu-text">As Learning</span>
+                </button>
+            </nav>
         </div>
-
-<!-- KODE PENGGANTI UNTUK TOMBOL LAMA (KOTAK MERAH) -->
-<nav class="learning-menu-container">
-    <button class="menu-btn locked" data-menu="atp" id="btn-atp" disabled>
-        <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
-        <span class="menu-text">ATP</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="asesmen-awal" id="btn-asesmen-awal" disabled>
-        <div class="menu-icon"><i class="ph ph-clipboard-text"></i></div>
-        <span class="menu-text">Asesmen Awal</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="pertanyaan-esensial" id="btn-pertanyaan-esensial" disabled>
-        <div class="menu-icon"><i class="ph ph-lightbulb"></i></div>
-        <span class="menu-text">Pertanyaan Esensial</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="eksplorasi-konsep" id="btn-eksplorasi-konsep" disabled>
-        <div class="menu-icon"><i class="ph ph-monitor-play"></i></div>
-        <span class="menu-text">Eksplorasi Konsep</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="for-learning" id="btn-for-learning" disabled>
-        <div class="menu-icon"><i class="ph ph-target"></i></div>
-        <span class="menu-text">For Learning</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="penerapan-konsep" id="btn-penerapan-konsep" disabled>
-        <div class="menu-icon"><i class="ph ph-laptop"></i></div>
-        <span class="menu-text">Penerapan Konsep</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-
-    <button class="menu-btn locked" data-menu="as-learning" id="btn-as-learning" disabled>
-        <div class="menu-icon"><i class="ph ph-brain"></i></div>
-        <span class="menu-text">As Learning</span>
-        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
-    </button>
-</nav>
-
-
-			
     </section>
 
-	<!-- ... (Kode HTML kotak biru dan tombol menu kamu ada di atas sini) ... -->
+    <!-- AREA UNTUK MEMUNCULKAN MATERI -->
+    <div id="dynamic-content-area" class="content-area">
+        <!-- Konten JSON akan dimuat di sini oleh JavaScript -->
+    </div>
 
-<script type="module">
-    import {
-        buatKomponenATP,
-        buatKomponenAsesmenAwal,
-        buatKomponenPertanyaanEsensial,
-        buatKomponenEksplorasiKonsep,
-        buatKomponenForLearning,
-        buatKomponenPenerapanKonsep,
-        buatKomponenAsLearning
-    } from './komponen-menu.js';
+    <!-- SCRIPT UTAMA -->
+    <script type="module">
+        import {
+            buatKomponenATP,
+            buatKomponenAsesmenAwal,
+            buatKomponenPertanyaanEsensial,
+            buatKomponenEksplorasiKonsep,
+            buatKomponenForLearning,
+            buatKomponenPenerapanKonsep,
+            buatKomponenAsLearning
+        } from './komponen-menu.js';
 
-    async function muatDataMateri() {
-        try {
-            const response = await fetch('materi.json');
-            if (!response.ok) throw new Error(`Gagal memuat: ${response.status}`);
-            const dataSemuaMateri = await response.json();
-            const currentId = new URLSearchParams(window.location.search).get('id');
-            const dataMateri = dataSemuaMateri[currentId];
+        async function muatDataMateri() {
+            try {
+                const response = await fetch('materi.json');
+                if (!response.ok) throw new Error(`Gagal memuat: ${response.status}`);
+                const dataSemuaMateri = await response.json();
+                
+                // Ambil ID dari URL, jika kosong gunakan default
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentId = urlParams.get('id') || Object.keys(dataSemuaMateri)[0]; 
+                const dataMateri = dataSemuaMateri[currentId];
 
-            if (!dataMateri) return alert("Materi tidak ditemukan!");
-
-            document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
-            document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
-
-            // ========================================================
-            // PASTIKAN KODE YANG BOCOR TADI DIMASUKKAN KE DALAM SINI
-            // ========================================================
-            // 3. MEMBANGUN STRUKTUR MENU
-            let learningMenus = [
-                // ... (seluruh kode pembuat menu kamu) ...
-            ];
-
-            // 4. MENAMPILKAN KE LAYAR
-            // renderMenu(learningMenus);
-            // switchTab(learningMenus[0].id);
-
-        } catch (error) {
-            console.error("Terjadi kesalahan:", error);
-        }
-    } 
-
-    muatDataMateri();
-</script>
-
-<!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
-<div id="dynamic-content-area" class="content-area">
-    <!-- Konten JSON akan dimuat di sini -->
-</div>
-    
-
-            // 3. MEMBANGUN STRUKTUR MENU
-            // Di sinilah keajaibannya terjadi! Kita memasukkan data JSON ke dalam fungsi komponen.
-            // Parameter seperti 'dataMateri.konten.atp' adalah data yang akan diproses oleh komponen-menu.js
-            let learningMenus = [
-                { 
-                    id: "atp", 
-                    title: "ATP", 
-                    icon: "ph-target", 
-                    btnText: "SELESAI DIBACA", 
-                    html: buatKomponenATP(dataMateri.konten.atp) 
-                },
-                { 
-                    id: "asesmen-awal", 
-                    title: "ASESMEN AWAL", 
-                    icon: "ph-clipboard-text", 
-                    btnText: "KIRIM JAWABAN", 
-                    html: buatKomponenAsesmenAwal(dataMateri.konten["asesmen-awal"]) 
-                },
-                { 
-                    id: "pertanyaan-esensial", 
-                    title: "PERTANYAAN ESENSIAL", 
-                    icon: "ph-lightbulb", 
-                    btnText: "SIMPAN JAWABAN", 
-                    html: buatKomponenPertanyaanEsensial(dataMateri.konten["pertanyaan-esensial"]) 
-                },
-                { 
-                    id: "eksplorasi-konsep", 
-                    title: "EKSPLORASI KONSEP", 
-                    icon: "ph-compass", 
-                    btnText: "SELESAI BACA SLIDE", 
-                    html: buatKomponenEksplorasiKonsep(dataMateri.konten["eksplorasi-konsep"]) 
-                },
-                { 
-                    id: "for-learning", 
-                    title: "FOR LEARNING", 
-                    icon: "ph-pencil-simple", 
-                    btnText: "CEK HASIL KUIS", 
-                    html: buatKomponenForLearning(dataMateri.konten["for-learning"]) 
-                },
-                { 
-                    id: "penerapan-konsep", 
-                    title: "PENERAPAN KONSEP", 
-                    icon: "ph-hammer", 
-                    btnText: "KUMPULKAN TUGAS", 
-                    html: buatKomponenPenerapanKonsep(dataMateri.konten["penerapan-konsep"]) 
-                },
-                { 
-                    id: "as-learning", 
-                    title: "AS LEARNING", 
-                    icon: "ph-plant", 
-                    btnText: "SIMPAN REFLEKSI", 
-                    html: buatKomponenAsLearning(dataMateri.konten["as-learning"]) 
+                if (!dataMateri) {
+                    console.error("Materi tidak ditemukan!");
+                    return;
                 }
-            ];
 
-            // 4. MENAMPILKAN KE LAYAR
-            // Ini berasumsi kamu sudah punya fungsi ini dari kode sebelumnya
-            // untuk mengatur tata letak tombol menu dan berpindah tab
-            initContent(learningMenus);
-            renderMenu(learningMenus);
-            switchTab(learningMenus[0].id); // Langsung buka tab pertama (ATP) saat dimuat
+                // Ganti Teks Judul
+                document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
+                document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
 
-        } catch (error) {
-            console.error("Gagal memuat:", error);
+                // Membangun Struktur Menu dengan JSON
+                let learningMenus = [
+                    { id: "atp", html: buatKomponenATP(dataMateri.konten.atp) },
+                    { id: "asesmen-awal", html: buatKomponenAsesmenAwal(dataMateri.konten["asesmen-awal"]) },
+                    { id: "pertanyaan-esensial", html: buatKomponenPertanyaanEsensial(dataMateri.konten["pertanyaan-esensial"]) },
+                    { id: "eksplorasi-konsep", html: buatKomponenEksplorasiKonsep(dataMateri.konten["eksplorasi-konsep"]) },
+                    { id: "for-learning", html: buatKomponenForLearning(dataMateri.konten["for-learning"]) },
+                    { id: "penerapan-konsep", html: buatKomponenPenerapanKonsep(dataMateri.konten["penerapan-konsep"]) },
+                    { id: "as-learning", html: buatKomponenAsLearning(dataMateri.konten["as-learning"]) }
+                ];
+
+                // Menjalankan fungsi penyiapan konten
+                initContent(learningMenus);
+                
+                // Langsung buka tab pertama (ATP) secara otomatis
+                window.switchTab('atp');
+
+            } catch (error) {
+                console.error("Terjadi kesalahan:", error);
+            }
+        } 
+
+        // Fungsi untuk memasukkan konten HTML ke dalam wadah layar
+        function initContent(menus) {
+            const mainContent = document.getElementById('dynamic-content-area');
+            mainContent.innerHTML = ''; 
+            
+            menus.forEach(menu => {
+                const contentDiv = document.createElement('div');
+                contentDiv.id = 'konten-' + menu.id;
+                contentDiv.style.display = 'none'; 
+                contentDiv.innerHTML = menu.html;  
+                mainContent.appendChild(contentDiv);
+            });
         }
-    }
-// ==========================================
-// FUNGSI-FUNGSI UNTUK MENCETAK MENU KE LAYAR
-// ==========================================
 
-// 1. Fungsi untuk menyiapkan wadah konten setiap menu
-function initContent(menus) {
-    const mainContent = document.getElementById('main-content');
-    mainContent.innerHTML = ''; // Bersihkan area konten sebelum mengisinya
-    
-    menus.forEach(menu => {
-        // Membuat kotak (div) baru untuk setiap menu
-        const contentDiv = document.createElement('div');
-        contentDiv.id = 'konten-' + menu.id;
-        contentDiv.style.display = 'none'; // Sembunyikan semuanya di awal
-        contentDiv.innerHTML = menu.html;  // Masukkan data HTML dari JSON kamu
-        
-        mainContent.appendChild(contentDiv);
-    });
-}
-
-// 2. Fungsi untuk membuat tombol-tombol 7 menu
-function renderMenu(menus) {
-    const menuContainer = document.getElementById('menu-container');
-    menuContainer.innerHTML = ''; // Bersihkan wadah menu sebelum mengisinya
-    
-    menus.forEach(menu => {
-        // Membuat elemen tombol untuk setiap menu
-        const button = document.createElement('button');
-        button.className = 'menu-btn'; // Pastikan kamu punya pengaturan CSS untuk class ini agar rapi
-        button.id = 'tombol-' + menu.id;
-        button.innerText = menu.title; // Memberi nama tombol sesuai data (misal: "ATP")
-        
-        // Memberikan perintah: jika tombol diklik, jalankan fungsi switchTab
-        button.onclick = function() {
-            switchTab(menu.id);
+        // Fungsi agar switchTab bisa dipanggil oleh tombol HTML
+        window.switchTab = function(menuIdPilihan) {
+            const mainContent = document.getElementById('dynamic-content-area');
+            if (!mainContent) return;
+            
+            // Sembunyikan semua materi
+            const semuaKonten = mainContent.children;
+            for (let i = 0; i < semuaKonten.length; i++) {
+                semuaKonten[i].style.display = 'none';
+            }
+            
+            // Tampilkan materi pilihan
+            const kontenPilihan = document.getElementById('konten-' + menuIdPilihan);
+            if (kontenPilihan) kontenPilihan.style.display = 'block';
         };
-        
-        menuContainer.appendChild(button);
-    });
-}
 
-// 3. Fungsi untuk mengatur perpindahan saat menu diklik
-function switchTab(menuIdPilihan) {
-    // A. Sembunyikan semua konten terlebih dahulu
-    const semuaKonten = document.getElementById('main-content').children;
-    for (let i = 0; i < semuaKonten.length; i++) {
-        semuaKonten[i].style.display = 'none';
-    }
-    
-    // B. Tampilkan HANYA konten dari menu yang sedang dipilih
-    document.getElementById('konten-' + menuIdPilihan).style.display = 'block';
-    
-    // C. (Opsional) Mengatur tampilan tombol yang sedang aktif agar berbeda warna
-    const semuaTombol = document.getElementById('menu-container').children;
-    for (let i = 0; i < semuaTombol.length; i++) {
-        semuaTombol[i].classList.remove('aktif'); // Hapus tanda aktif dari semua tombol
-    }
-    document.getElementById('tombol-' + menuIdPilihan).classList.add('aktif'); // Beri tanda aktif ke tombol pilihan
-}
-    
-    // Jalankan fungsi saat halaman web selesai dimuat
-    window.onload = muatDataMateri;
-</script>
+        // Jalankan fungsi memuat materi
+        muatDataMateri();
+    </script>
 </body>
 </html>
