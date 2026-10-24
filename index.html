@@ -8,6 +8,56 @@
     <!-- Import Fonts & Phosphor Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+	<!-- Kontainer 7 Menu Pembelajaran -->
+<nav class="learning-menu-container">
+    <button class="menu-btn locked" data-menu="atp" id="btn-atp" disabled>
+        <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
+        <span class="menu-text">ATP</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="asesmen-awal" id="btn-asesmen-awal" disabled>
+        <div class="menu-icon"><i class="ph ph-clipboard-text"></i></div>
+        <span class="menu-text">Asesmen Awal</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="pertanyaan-esensial" id="btn-pertanyaan-esensial" disabled>
+        <div class="menu-icon"><i class="ph ph-lightbulb"></i></div>
+        <span class="menu-text">Pertanyaan Esensial</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="eksplorasi-konsep" id="btn-eksplorasi-konsep" disabled>
+        <div class="menu-icon"><i class="ph ph-monitor-play"></i></div>
+        <span class="menu-text">Eksplorasi Konsep</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="for-learning" id="btn-for-learning" disabled>
+        <div class="menu-icon"><i class="ph ph-target"></i></div>
+        <span class="menu-text">For Learning</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="penerapan-konsep" id="btn-penerapan-konsep" disabled>
+        <div class="menu-icon"><i class="ph ph-laptop"></i></div>
+        <span class="menu-text">Penerapan Konsep</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+
+    <button class="menu-btn locked" data-menu="as-learning" id="btn-as-learning" disabled>
+        <div class="menu-icon"><i class="ph ph-brain"></i></div>
+        <span class="menu-text">As Learning</span>
+        <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
+    </button>
+</nav>
+
+<!-- Area Konten Dinamis yang akan memuat JSON -->
+<div id="dynamic-content-area" class="content-area">
+    <!-- Konten akan dimuat di sini oleh JavaScript -->
+</div>
     
     <!-- TAMBAHKAN BARIS INI UNTUK MEMANGGIL FILE style.css -->
     <link rel="stylesheet" href="style.css">
