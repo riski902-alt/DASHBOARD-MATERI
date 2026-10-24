@@ -152,8 +152,12 @@
     async function muatDataMateri() {
         try {
             // Mengambil data dari file JSON kamu
-            const response = await fetch('materi_2.json');
-            const dataSemuaMateri = await response.json();
+            const response = await fetch('materi.json');
+// Tambahkan pengecekan ini: jika statusnya bukan OK (misal 404), hentikan dan lempar error
+if (!response.ok) {
+    throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
+}
+const dataSemuaMateri = await response.json();
             
             // Mengambil ID dari URL (misal: website.com/index.html?id=kelas7-sem1-bab1-pertemuan1)
             const currentId = new URLSearchParams(window.location.search).get('id');
