@@ -193,27 +193,31 @@
         buatKomponenEksplorasiKonsep,
         buatKomponenForLearning,
         buatKomponenPenerapanKonsep,
+        <script type="module">
+    import {
+        buatKomponenATP,
+        buatKomponenAsesmenAwal,
+        buatKomponenPertanyaanEsensial,
+        buatKomponenEksplorasiKonsep,
+        buatKomponenForLearning,
+        buatKomponenPenerapanKonsep,
         buatKomponenAsLearning
     } from './komponen-menu.js';
-</script> 
 
-
-<!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
-<div id="dynamic-content-area" class="content-area">
-    <!-- Konten JSON akan dimuat di sini -->
-</div>
     // 2. FUNGSI UNTUK MEMUAT DAN MENAMPILKAN DATA
     async function muatDataMateri() {
-        try {
+        try { // <--- BLOK TRY DIBUKA DI SINI
+            
             // Mengambil data dari file JSON kamu
             const response = await fetch('materi.json');
-// Tambahkan pengecekan ini: jika statusnya bukan OK (misal 404), hentikan dan lempar error
-if (!response.ok) {
-    throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
-}
-const dataSemuaMateri = await response.json();
             
-            // Mengambil ID dari URL (misal: website.com/index.html?id=kelas7-sem1-bab1-pertemuan1)
+            // Pengecekan status
+            if (!response.ok) {
+                throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
+            }
+            const dataSemuaMateri = await response.json();
+            
+            // Mengambil ID dari URL
             const currentId = new URLSearchParams(window.location.search).get('id');
             const dataMateri = dataSemuaMateri[currentId];
 
@@ -222,10 +226,25 @@ const dataSemuaMateri = await response.json();
                 return;
             }
 
-            // Memperbarui teks Judul Bab dan Pertemuan di HTML kamu
-            // Pastikan kamu punya elemen dengan id 'judul-bab' dan 'pertemuan-info' di HTML-mu
+            // Memperbarui teks Judul Bab dan Pertemuan di HTML
             document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
             document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
+
+        } catch (error) { // <--- INI ADALAH PENUTUP TRY DAN PEMBUKA CATCH YANG TERPOTONG
+            console.error("Terjadi kesalahan:", error);
+        } // <--- INI ADALAH PENUTUP CATCH
+    } // <--- INI ADALAH PENUTUP FUNGSI MUATDATAMATERI
+
+    // Menjalankan fungsi saat halaman dimuat (INI JUGA TERPOTONG SEBELUMNYA)
+    muatDataMateri();
+</script>
+
+
+<!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
+<div id="dynamic-content-area" class="content-area">
+    <!-- Konten JSON akan dimuat di sini -->
+</div>
+    
 
             // 3. MEMBANGUN STRUKTUR MENU
             // Di sinilah keajaibannya terjadi! Kita memasukkan data JSON ke dalam fungsi komponen.
