@@ -120,6 +120,7 @@
 <div class="meeting-info">
     <!-- Tambahkan id="pertemuan-info" di sini -->
     <span class="meeting-badge" id="pertemuan-info">Pertemuan 1</span>
+    <p class="meeting-desc">Pada pertemuan ini, kita akan mengeksplorasi langkah-langkah dasar berpikir komputasional untuk memecahkan masalah sistematis.</p>
 </div>
         
         <div class="progress-box">
@@ -239,6 +240,65 @@ const dataSemuaMateri = await response.json();
             console.error("Gagal memuat:", error);
         }
     }
+// ==========================================
+// FUNGSI-FUNGSI UNTUK MENCETAK MENU KE LAYAR
+// ==========================================
+
+// 1. Fungsi untuk menyiapkan wadah konten setiap menu
+function initContent(menus) {
+    const mainContent = document.getElementById('main-content');
+    mainContent.innerHTML = ''; // Bersihkan area konten sebelum mengisinya
+    
+    menus.forEach(menu => {
+        // Membuat kotak (div) baru untuk setiap menu
+        const contentDiv = document.createElement('div');
+        contentDiv.id = 'konten-' + menu.id;
+        contentDiv.style.display = 'none'; // Sembunyikan semuanya di awal
+        contentDiv.innerHTML = menu.html;  // Masukkan data HTML dari JSON kamu
+        
+        mainContent.appendChild(contentDiv);
+    });
+}
+
+// 2. Fungsi untuk membuat tombol-tombol 7 menu
+function renderMenu(menus) {
+    const menuContainer = document.getElementById('menu-container');
+    menuContainer.innerHTML = ''; // Bersihkan wadah menu sebelum mengisinya
+    
+    menus.forEach(menu => {
+        // Membuat elemen tombol untuk setiap menu
+        const button = document.createElement('button');
+        button.className = 'menu-btn'; // Pastikan kamu punya pengaturan CSS untuk class ini agar rapi
+        button.id = 'tombol-' + menu.id;
+        button.innerText = menu.title; // Memberi nama tombol sesuai data (misal: "ATP")
+        
+        // Memberikan perintah: jika tombol diklik, jalankan fungsi switchTab
+        button.onclick = function() {
+            switchTab(menu.id);
+        };
+        
+        menuContainer.appendChild(button);
+    });
+}
+
+// 3. Fungsi untuk mengatur perpindahan saat menu diklik
+function switchTab(menuIdPilihan) {
+    // A. Sembunyikan semua konten terlebih dahulu
+    const semuaKonten = document.getElementById('main-content').children;
+    for (let i = 0; i < semuaKonten.length; i++) {
+        semuaKonten[i].style.display = 'none';
+    }
+    
+    // B. Tampilkan HANYA konten dari menu yang sedang dipilih
+    document.getElementById('konten-' + menuIdPilihan).style.display = 'block';
+    
+    // C. (Opsional) Mengatur tampilan tombol yang sedang aktif agar berbeda warna
+    const semuaTombol = document.getElementById('menu-container').children;
+    for (let i = 0; i < semuaTombol.length; i++) {
+        semuaTombol[i].classList.remove('aktif'); // Hapus tanda aktif dari semua tombol
+    }
+    document.getElementById('tombol-' + menuIdPilihan).classList.add('aktif'); // Beri tanda aktif ke tombol pilihan
+}
     
     // Jalankan fungsi saat halaman web selesai dimuat
     window.onload = muatDataMateri;
