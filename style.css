@@ -272,34 +272,30 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
     --bg-navy: #0A192F;
 }
 
-/* Container Bento Grid Horizontal */
+/* 1. WADAH TOMBOL MENU */
 .learning-menu-container {
     display: flex;
-    flex-wrap/* 1. MENGATUR WADAH TOMBOL */
-.learning-menu-container {
-    display: flex;
-    width: 100%; /* INI PENTING: Memaksa wadah agar penuh dari ujung kiri ke kanan */
-    gap: 12px;
-    padding: 15px 0; /* Padding atas bawah 15px, kiri kanan 0 */
+    width: 100%; /* Memastikan wadah membentang penuh 100% */
+    gap: 15px; /* Memberikan jarak antar tombol agar tidak mepet */
+    padding: 15px 0;
     margin-top: 15px;
-    overflow-x: auto; /* Jika dibuka di HP, tombol tetap bisa digeser (scroll) */
+    overflow-x: auto; /* Memungkinkan geser (scroll) jika di layar HP */
 }
 
-/* 2. MENGATUR TOMBOL */
+/* 2. DESAIN TOMBOL */
 .menu-btn {
-    flex: 1 1 0; /* INI PENTING: flex-grow 1, shrink 1, basis 0. Artinya membagi sisa ruang secara rata! */
-    min-width: 100px; /* Batas aman agar tulisan tidak terlalu tergencet */
+    flex: 1; /* Menyuruh tombol untuk membesar dan membagi ruang sama rata */
+    min-width: 100px; /* Batas minimal agar teks tidak terlipat saat layar kecil */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 15px 10px;
+    padding: 10px;
     background-color: #152C5B; 
     border: 1px solid var(--menu-border);
-    border-radius: 12px;
+    border-radius: 8px; /* Membuat sudut tombol agak membulat */
     color: var(--menu-text);
     cursor: pointer;
-    position: relative;
 }
 
 .menu-icon i { font-size: 28px; margin-bottom: 8px; }
