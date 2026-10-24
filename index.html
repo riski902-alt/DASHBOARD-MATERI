@@ -109,11 +109,16 @@
                 <span class="meeting-badge" id="pertemuan-info">Pertemuan 1</span>
             </div>
             
-            <div class="progress-box">
-                <span class="progress-title">PROGRES PEMBELAJARAN</span>
-                <span id="progress-text" class="progress-stats">0 dari 7 menu selesai (0%)</span>
-                <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
-            </div>
+            <div class="progress-section">
+    <h4>PROGRES PEMBELAJARAN</h4>
+    <!-- Teks Progres -->
+    <p id="progress-text">0 dari 7 menu selesai (0%)</p>
+    
+    <!-- Garis Progres -->
+    <div class="progress-bar-bg" style="width: 100%; height: 10px; background-color: #2a4b75; border-radius: 5px;">
+        <div id="progress-fill" style="width: 0%; height: 100%; background-color: #88D4AB; border-radius: 5px; transition: width 0.5s ease;"></div>
+    </div>
+</div>
 
             <!-- CONTAINER 7 TOMBOL MENU -->
             <nav class="learning-menu-container">
