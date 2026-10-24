@@ -132,6 +132,60 @@
     <nav class="nav-wrapper"><div class="nav-container" id="menu-container"></div></nav>
     <main class="content-area" id="main-content"></main>
 
+	<script type="module">
+    // Import fungsi pembuat komponen yang tadi kita buat
+    import { 
+        buatKomponenATP, 
+        buatKomponenAsesmenAwal, 
+        buatKomponenPertanyaanEsensial,
+        buatKomponenEksplorasiKonsep
+    } from './komponen-menu.js';
+
+    // ... (kode pengecekan login tetap di sini) ...
+
+    async function muatDataMateri() {
+        try {
+            const response = await fetch('materi_2.json');
+            const dataSemuaMateri = await response.json();
+            const currentId = new URLSearchParams(window.location.search).get('id');
+            const dataMateri = dataSemuaMateri[currentId];
+
+            if (!dataMateri) return alert("Materi tidak ditemukan!");
+
+            // Perbarui Judul
+            document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
+            document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
+
+            // BANGUN MENU MENGGUNAKAN KOMPONEN!
+            learningMenus = [
+                { id: "atp", title: "ATP", icon: "ph-target", btnText: "SELESAI DIBACA", 
+                  html: buatKomponenATP(dataMateri.konten.atp) },
+                  
+                { id: "asesmen-awal", title: "ASESMEN AWAL", icon: "ph-clipboard-text", btnText: "KIRIM JAWABAN", 
+                  html: buatKomponenAsesmenAwal(dataMateri.konten["asesmen-awal"]) },
+                  
+                { id: "pertanyaan-esensial", title: "PERTANYAAN ESENSIAL", icon: "ph-lightbulb", btnText: "SIMPAN JAWABAN", 
+                  html: buatKomponenPertanyaanEsensial(dataMateri.konten["pertanyaan-esensial"]) },
+                  
+                { id: "eksplorasi-konsep", title: "EKSPLORASI KONSEP", icon: "ph-compass", btnText: "SELESAI BACA SLIDE", 
+                  html: buatKomponenEksplorasiKonsep(dataMateri.konten["eksplorasi-konsep"]) }
+                  
+                // Lanjutkan untuk menu lainnya...
+            ];
+
+            initContent();
+            renderMenu();
+            switchTab(currentActiveMenuId);
+
+        } catch (error) {
+            console.error("Gagal memuat:", error);
+        }
+    }
+    
+    // ... sisa kode lainnya ...
+
+</script>
+
     <script type="module">
         // 1. CEK LOGIN MELALUI LOCALSTORAGE (PERBAIKAN LANGKAH 3)
         const userRole = localStorage.getItem("userRole");
