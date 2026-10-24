@@ -132,22 +132,6 @@
             <span id="progress-text" class="progress-stats">0 dari 7 menu selesai (0%)</span>
             <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
         </div>
-    </section>
-
-	<!-- Pastikan tag script menggunakan type="module" -->
-<script type="module">
-    // 1. MENGIMPOR KOMPONEN
-    // Kita memanggil ke-7 fungsi yang sudah kamu buat di file komponen-menu.js
-    import {
-        buatKomponenATP,
-        buatKomponenAsesmenAwal,
-        buatKomponenPertanyaanEsensial,
-        buatKomponenEksplorasiKonsep,
-        buatKomponenForLearning,
-        buatKomponenPenerapanKonsep,
-        buatKomponenAsLearning
-    } from './komponen-menu.js';
-</script> 
 
 <!-- KODE PENGGANTI UNTUK TOMBOL LAMA (KOTAK MERAH) -->
 <nav class="learning-menu-container">
@@ -193,7 +177,27 @@
         <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
     </button>
 </nav>
-	
+
+
+			
+    </section>
+
+	<!-- Pastikan tag script menggunakan type="module" -->
+<script type="module">
+    // 1. MENGIMPOR KOMPONEN
+    // Kita memanggil ke-7 fungsi yang sudah kamu buat di file komponen-menu.js
+    import {
+        buatKomponenATP,
+        buatKomponenAsesmenAwal,
+        buatKomponenPertanyaanEsensial,
+        buatKomponenEksplorasiKonsep,
+        buatKomponenForLearning,
+        buatKomponenPenerapanKonsep,
+        buatKomponenAsLearning
+    } from './komponen-menu.js';
+</script> 
+
+
 <!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
 <div id="dynamic-content-area" class="content-area">
     <!-- Konten JSON akan dimuat di sini -->
