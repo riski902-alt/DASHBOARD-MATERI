@@ -194,92 +194,103 @@
         muatDataMateri();
     </script>
 
-    <!-- SKRIP FIREBASE & PROGRES -->
-    <script>
-        // 1. KONFIGURASI FIREBASE (GANTI DENGAN DATA DARI FIREBASE CONSOLE ANDA)
-        const firebaseConfig = {
-            apiKey: "API_KEY_ANDA",
-            authDomain: "PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "PROJECT_ID",
-            storageBucket: "PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
-        };
+   <!-- SKRIP FIREBASE & PROGRES -->
+<script>
+    // 1. KONFIGURASI FIREBASE (Pastikan data ini sesuai dengan milik Anda)
+    const firebaseConfig = {
+        apiKey: "API_KEY_ANDA",
+        authDomain: "PROJECT_ID.firebaseapp.com",
+        databaseURL: "https://PROJECT_ID-default-rtdb.firebaseio.com",
+        projectId: "PROJECT_ID",
+        storageBucket: "PROJECT_ID.appspot.com",
+        messagingSenderId: "SENDER_ID",
+        appId: "APP_ID"
+    };
+    
+    // Inisialisasi Firebase jika belum ada
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const totalMenus = 7;
+        const progressText = document.getElementById("progress-text");
+        const progressFill = document.getElementById("progress-fill");
         
-        // Inisialisasi Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const database = firebase.database();
+        // Ambil ID User
+        const userId = localStorage.getItem("currentUserId") || "siswa_dummy_01"; 
+        const dbRef = database.ref('users/' + userId + '/progres_bab3'); // Pastikan ini bab yang benar
+        const localKey = `progresBelajar_${userId}_bab3`; // Key khusus per bab
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const totalMenus = 7;
-            const progressText = document.getElementById("progress-text");
-            const progressFill = document.getElementById("progress-fill");
+        // Variabel untuk menyimpan daftar menu yang sudah selesai
+        let completedMenus = JSON.parse(localStorage.getItem(localKey)) || [];
+
+        // 2. FUNGSI UNTUK MEMPERBARUI TAMPILAN PROGRES
+        function updateProgressUI(completedMenusArray) {
+            // Hilangkan duplikat ID jika ada
+            const uniqueCompleted = [...new Set(completedMenusArray)];
+            const completedCount = uniqueCompleted.length;
             
-            // Asumsi: Anda menyimpan userId siswa yang sedang login di localStorage (misal dari cek-login.js)
-            // Jika Anda menggunakan nama variabel lain, sesuaikan di sini.
-            const userId = localStorage.getItem("currentUserId") || "siswa_dummy_01"; 
-            const dbRef = database.ref('users/' + userId + '/progres_bab1');
+            // Hitung persentase (maksimal 100%)
+            let percentage = Math.round((completedCount / totalMenus) * 100);
+            if (percentage > 100) percentage = 100;
 
-            // Fungsi untuk memperbarui tampilan UI progres
-            function updateProgressUI(completedMenusArray) {
-                const completedCount = completedMenusArray.length;
-                const percentage = Math.round((completedCount / totalMenus) * 100);
-
-                // Update teks dan lebar bar progres
+            // Update teks dan lebar bar progres di HTML
+            if (progressText) {
                 progressText.innerText = `${completedCount} dari ${totalMenus} menu selesai (${percentage}%)`;
+            }
+            if (progressFill) {
                 progressFill.style.width = `${percentage}%`;
-
-                // Update warna tombol menu yang sudah selesai (Opsional)
-                completedMenusArray.forEach(menuId => {
-                    const btn = document.getElementById(menuId);
-                    if(btn) {
-                        btn.classList.add("completed");
-                        btn.classList.remove("locked");
-                        // Ganti ikon gembok jadi centang (opsional)
-                        const statusIcon = btn.querySelector('.menu-status i');
-                        if(statusIcon) {
-                            statusIcon.className = 'ph ph-check-circle';
-                        }
-                    }
-                });
             }
 
-            // 2. BACA DARI LOCALSTORAGE (Untuk Load Cepat)
-            const localKey = `progresBelajar_${userId}`;
-            let completedMenus = JSON.parse(localStorage.getItem(localKey)) || [];
-            updateProgressUI(completedMenus);
-
-            // 3. SINKRONISASI DARI FIREBASE (Real-time listener)
-            dbRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    // Konversi objek database (ex: { 'btn-atp': true }) menjadi array ['btn-atp']
-                    const completedFromDb = Object.keys(data);
-                    
-                    // Simpan ke localStorage agar sinkron
-                    localStorage.setItem(localKey, JSON.stringify(completedFromDb));
-                    
-                    // Update UI
-                    updateProgressUI(completedFromDb);
+            // Update warna tombol menu
+            uniqueCompleted.forEach(menuId => {
+                const btn = document.getElementById(menuId);
+                if(btn) {
+                    btn.classList.add("completed");
+                    btn.classList.remove("locked");
+                    const statusIcon = btn.querySelector('.menu-status i');
+                    if(statusIcon) {
+                        statusIcon.className = 'ph ph-check-circle';
+                    }
                 }
             });
+        }
 
-            // 4. FUNGSI GLOBAL UNTUK MENANDAI SELESAI
-            // Fungsi ini sekarang BISA dipanggil dari dalam materi/kuis
-            window.tandaiMenuSelesai = function(menuId) {
-                // Simpan ke Firebase
-                dbRef.child(menuId).set(true)
-                .then(() => {
-                    console.log(`${menuId} berhasil disimpan ke Firebase!`);
-                })
-                .catch((error) => {
-                    console.error("Gagal menyimpan ke Firebase:", error);
-                });
-            };
+        // Tampilkan progres awal saat halaman dimuat
+        updateProgressUI(completedMenus);
+
+        // 3. SINKRONISASI DARI FIREBASE (Real-time listener)
+        dbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const completedFromDb = Object.keys(data);
+                completedMenus = completedFromDb; // Sinkronkan array lokal dengan database
+                localStorage.setItem(localKey, JSON.stringify(completedMenus));
+                updateProgressUI(completedMenus);
+            }
         });
-    </script>
+
+        // 4. FUNGSI GLOBAL UNTUK MENANDAI SELESAI
+        window.tandaiMenuSelesai = function(menuId) {
+            // A. Update UI Instan (Optimistic UI) agar pengguna langsung melihat perubahan
+            if (!completedMenus.includes(menuId)) {
+                completedMenus.push(menuId);
+                localStorage.setItem(localKey, JSON.stringify(completedMenus));
+                updateProgressUI(completedMenus);
+            }
+
+            // B. Simpan ke Firebase di latar belakang
+            dbRef.child(menuId).set(true)
+            .then(() => {
+                console.log(`${menuId} berhasil disimpan ke Firebase!`);
+            })
+            .catch((error) => {
+                console.error("Gagal menyimpan ke Firebase:", error);
+            });
+        };
+    });
+</script>
 </body>
 </html>
