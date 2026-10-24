@@ -1,35 +1,45 @@
 // ==========================================
 // File: cek-login.js
-// Tujuan: Mencegah akses masuk tanpa login ke halaman materi
+// Tujuan: Mencegah akses tanpa login & menampilkan profil pengguna
 // ==========================================
 
-// 1. Mengambil data sesi login dari memori penyimpanan browser (localStorage)
-// Nama kunci ini sudah disesuaikan dengan file halaman login.html yang kita buat
+// 1. Mengambil data sesi login dari localStorage
 const currentUser = localStorage.getItem('infoFun_Nama');
 const currentNISN = localStorage.getItem('infoFun_NISN');
 
-// 2. Mendapatkan nama halaman atau path yang sedang dibuka saat ini
+// 2. Mendapatkan nama halaman yang sedang dibuka
 const currentPage = window.location.pathname.split("/").pop().toLowerCase();
-
-// 3. Menentukan URL halaman login yang sebenarnya
-// Ganti URL di bawah ini dengan link website login-mu yang paling tepat. 
-// Menggunakan URL lengkap (absolut) jauh lebih aman dan akurat.
 const loginUrlLengkap = "https://riski902-alt.github.io/LOGIN-MATERI/";
 
-// 4. Daftar halaman yang dianggap sebagai "Halaman Login" (Boleh diakses tanpa login)
-// Termasuk 'index.html', 'halaman login.html', atau sekadar '/' (terbaca kosong "")
+// 3. Daftar halaman login yang diizinkan tanpa autentikasi
 const allowedPages = ["index.html", "halaman%20login.html", "halaman_login.html"];
-
-// Mengecek apakah halaman saat ini adalah salah satu dari halaman login
 const isAtLoginPage = allowedPages.includes(currentPage) || window.location.href === loginUrlLengkap;
 
-// 5. Logika Pengecekan Keamanan Utama
-// JIKA data login tidak lengkap (belum login) DAN pengguna SEDANG BUKAN di halaman login
+// 4. Logika Pengecekan Keamanan Akses
 if ((!currentUser || !currentNISN) && !isAtLoginPage) {
-    
-    // Tampilkan pesan peringatan kepada pengguna
     alert("Hayo! Kamu harus login terlebih dahulu untuk mengakses materi ini ya.");
-    
-    // Arahkan (redirect) pengguna secara paksa ke URL halaman login yang benar
     window.location.href = loginUrlLengkap;
+} else {
+    // 5. Tampilkan Nama dan Aktifkan Tombol Logout setelah DOM Siap
+    document.addEventListener("DOMContentLoaded", () => {
+        const userNameDisplay = document.getElementById('user-name-display');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        // Tampilkan Nama Siswa jika elemen ditemukan
+        if (userNameDisplay && currentUser) {
+            userNameDisplay.innerText = currentUser;
+        }
+
+        // Tampilkan dan Aktifkan Tombol Logout
+        if (logoutBtn) {
+            logoutBtn.style.display = 'inline-block';
+            logoutBtn.addEventListener('click', () => {
+                if (confirm("Apakah kamu yakin ingin keluar?")) {
+                    localStorage.removeItem('infoFun_Nama');
+                    localStorage.removeItem('infoFun_NISN');
+                    window.location.href = loginUrlLengkap;
+                }
+            });
+        }
+    });
 }
