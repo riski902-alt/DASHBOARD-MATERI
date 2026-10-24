@@ -1,129 +1,138 @@
 // ==========================================
 // File: cek-login.js
-// Tujuan: Mencegah pemblokiran Guru & memvalidasi login Siswa/Guru
+// Tujuan: Validasi Akses Login Siswa & Guru secara Konsisten & Akurat
 // ==========================================
 
-// Helper: Cek apakah string hanya berisi angka (NISN)
+// Helper: Memeriksa apakah teks hanya berupa angka (format NISN)
 function apakahHanyaAngka(teks) {
     if (!teks) return false;
     return /^\d+$/.test(teks.toString().trim());
 }
 
-// 1. Deteksi Peran (Role): 'guru' atau 'siswa'
-function dapatkanRoleUser() {
+// Fungsi Utama: Mengambil dan Memindai Seluruh Data Sesi dari LocalStorage & URL
+function ambilDataSesi() {
+    let data = {
+        nama: null,
+        nisn: null,
+        email: null,
+        role: null
+    };
+
+    // 1. Pindai Parameter dari URL (jika dialihkan dari LOGIN-MATERI)
     const urlParams = new URLSearchParams(window.location.search);
-    const roleUrl = urlParams.get('role') || urlParams.get('user_role') || urlParams.get('type');
-    
-    if (roleUrl) {
-        const roleClean = roleUrl.toLowerCase().trim();
-        localStorage.setItem('infoFun_Role', roleClean);
-        return roleClean;
+    if (urlParams.get('nama')) data.nama = decodeURIComponent(urlParams.get('nama')).trim();
+    if (urlParams.get('namaLengkap')) data.nama = decodeURIComponent(urlParams.get('namaLengkap')).trim();
+    if (urlParams.get('nama_siswa')) data.nama = decodeURIComponent(urlParams.get('nama_siswa')).trim();
+    if (urlParams.get('nisn')) data.nisn = urlParams.get('nisn').trim();
+    if (urlParams.get('email')) data.email = urlParams.get('email').trim();
+    if (urlParams.get('role')) data.role = urlParams.get('role').trim().toLowerCase();
+
+    // 2. Prioritas Kunci Utama LocalStorage
+    const infoNama = localStorage.getItem('infoFun_Nama') || localStorage.getItem('namaLengkap') || localStorage.getItem('nama_siswa') || localStorage.getItem('nama');
+    if (infoNama && !apakahHanyaAngka(infoNama)) {
+        data.nama = infoNama.trim();
     }
 
-    // Cek kata kunci role di localStorage
-    const roleDisimpan = localStorage.getItem('infoFun_Role') || 
-                         localStorage.getItem('role') || 
-                         localStorage.getItem('user_role') ||
-                         localStorage.getItem('user_type');
+    const infoNisn = localStorage.getItem('infoFun_NISN') || localStorage.getItem('nisn') || localStorage.getItem('user_nisn');
+    if (infoNisn && apakahHanyaAngka(infoNisn)) {
+        data.nisn = infoNisn.trim();
+    }
 
-    if (roleDisimpan) return roleDisimpan.toLowerCase().trim();
+    const infoEmail = localStorage.getItem('infoFun_Email') || localStorage.getItem('email') || localStorage.getItem('guru_email');
+    if (infoEmail) {
+        data.email = infoEmail.trim();
+    }
 
-    // Deteksi otomatis via email atau penanda Guru di localStorage
+    const infoRole = localStorage.getItem('infoFun_Role') || localStorage.getItem('role');
+    if (infoRole) {
+        data.role = infoRole.trim().toLowerCase();
+    }
+
+    // 3. Pindai Otomatis Seluruh Elemen LocalStorage (antisipasi data objek JSON / kunci alternatif)
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        const val = (localStorage.getItem(key) || '').toLowerCase();
-        if (key.includes('guru') || key.includes('email') || val.includes('@guru') || val.includes('guru')) {
-            return 'guru';
-        }
-    }
+        const rawVal = localStorage.getItem(key);
+        if (!rawVal || rawVal === 'undefined' || rawVal === 'null') continue;
 
-    return 'siswa';
-}
+        const val = rawVal.trim();
 
-// 2. Fungsi Pembaca Nama User (Siswa / Guru)
-function dapatkanNamaUser() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const namaUrl = urlParams.get('nama') || urlParams.get('namaLengkap') || urlParams.get('nama_siswa') || urlParams.get('user');
-    
-    if (namaUrl) {
-        const namaClean = decodeURIComponent(namaUrl).trim();
-        if (!apakahHanyaAngka(namaClean)) {
-            localStorage.setItem('infoFun_Nama', namaClean);
-            return namaClean;
-        }
-    }
-
-    const kunciNama = ['infoFun_Nama', 'namaLengkap', 'nama_siswa', 'nama', 'currentUser', 'user_nama', 'guru_nama', 'nama_guru'];
-    
-    for (const kunci of kunciNama) {
-        const val = localStorage.getItem(kunci);
-        if (val && val !== 'undefined' && val !== 'null' && val.trim() !== '') {
-            const nilaiBersih = val.trim();
-            if (!apakahHanyaAngka(nilaiBersih)) {
-                return nilaiBersih;
+        // Jika data disimpan dalam bentuk Objek JSON (misal: currentUser = {"nama": "...", "nisn": "..."})
+        if (val.startsWith('{') && val.endsWith('}')) {
+            try {
+                const obj = JSON.parse(val);
+                if (!data.nama && (obj.nama || obj.namaLengkap || obj.nama_siswa)) {
+                    data.nama = String(obj.nama || obj.namaLengkap || obj.nama_siswa).trim();
+                }
+                if (!data.nisn && (obj.nisn || obj.nisn_siswa)) {
+                    data.nisn = String(obj.nisn || obj.nisn_siswa).trim();
+                }
+                if (!data.email && obj.email) {
+                    data.email = String(obj.email).trim();
+                }
+                if (!data.role && (obj.role || obj.type)) {
+                    data.role = String(obj.role || obj.type).toLowerCase().trim();
+                }
+            } catch (e) {
+                // Abaikan jika gagal parse JSON
+            }
+        } else {
+            // Jika disimpan sebagai string langsung
+            const keyLower = key.toLowerCase();
+            if (!data.nama && keyLower.includes('nama') && !apakahHanyaAngka(val)) {
+                data.nama = val;
+            }
+            if (!data.nisn && keyLower.includes('nisn') && apakahHanyaAngka(val)) {
+                data.nisn = val;
+            }
+            if (!data.email && keyLower.includes('email') && val.includes('@')) {
+                data.email = val;
             }
         }
     }
 
-    return null;
+    return data;
 }
 
-// 3. Fungsi Pembaca NISN Siswa
-function dapatkanNISNSiswa() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const nisnUrl = urlParams.get('nisn') || urlParams.get('user_nisn');
-    
-    if (nisnUrl) {
-        localStorage.setItem('infoFun_NISN', nisnUrl);
-        return nisnUrl;
-    }
+// Eksekusi Pemindaian Data Sesi
+const sesi = ambilDataSesi();
 
-    const kunciNisn = ['infoFun_NISN', 'nisn', 'user_nisn', 'nisn_siswa'];
-    for (const kunci of kunciNisn) {
-        const val = localStorage.getItem(kunci);
-        if (val && val !== 'undefined' && val !== 'null' && val.trim() !== '') {
-            return val.trim();
-        }
-    }
+// Simpan Kembali Data Terkonfirmasi ke LocalStorage agar Konsisten
+if (sesi.nama) localStorage.setItem('infoFun_Nama', sesi.nama);
+if (sesi.nisn) localStorage.setItem('infoFun_NISN', sesi.nisn);
 
-    return null;
-}
-
-// 4. Logika Validasi Akses
+// 4. Logika Validasi Akses (Sangat Aman & Konsisten)
 const loginUrlLengkap = "https://riski902-alt.github.io/LOGIN-MATERI/";
-const roleUser = dapatkanRoleUser();
-const namaUser = dapatkanNamaUser();
-const nisnSiswa = dapatkanNISNSiswa();
 
-// Cek status login Guru dan Siswa
-let isGuruLoggedIn = roleUser === 'guru' || 
-                     !!localStorage.getItem('infoFun_Email') || 
-                     !!localStorage.getItem('guru_email') || 
-                     !!localStorage.getItem('email');
+// Siswa Valid jika: Memiliki Nama ATAU Memiliki NISN
+const isValidSiswa = !!(sesi.nama || sesi.nisn);
 
-let isSiswaLoggedIn = !!namaUser && !!nisnSiswa;
+// Guru Valid jika: Memiliki Email ATAU Role 'guru'
+const isValidGuru = !!(sesi.email || sesi.role === 'guru');
 
-let isLoginValid = isGuruLoggedIn || isSiswaLoggedIn;
+// Total Status Login Valid
+const isLoginValid = isValidSiswa || isValidGuru;
 
-// Pengalihan jika belum login
+// Pengalihan Paksa Jika Belum Login
 if (!isLoginValid && !window.location.href.includes("LOGIN-MATERI")) {
     alert("Kamu belum login! Silakan login terlebih dahulu untuk mengakses materi.");
     window.location.href = loginUrlLengkap;
 }
 
-// 5. Tampilkan Nama pada Header Dashboard setelah DOM Dimuat
+// 5. Tampilkan Profil pada Header Dashboard setelah DOM Dimuat
 document.addEventListener("DOMContentLoaded", () => {
     const userNameDisplay = document.getElementById('user-name-display');
     const logoutBtn = document.getElementById('logout-btn');
 
-    const namaAktif = dapatkanNamaUser();
-    const roleAktif = dapatkanRoleUser();
+    const dataSesiTerbaru = ambilDataSesi();
 
     if (userNameDisplay) {
-        if (roleAktif === 'guru') {
-            userNameDisplay.innerText = namaAktif ? `[Guru] ${namaAktif}` : "[Guru] Riski Amalia, S.Pd";
-        } else if (namaAktif) {
-            userNameDisplay.innerText = namaAktif;
+        if (dataSesiTerbaru.role === 'guru' || (dataSesiTerbaru.email && !dataSesiTerbaru.nisn)) {
+            const namaGuru = dataSesiTerbaru.nama || "Riski Amalia, S.Pd";
+            userNameDisplay.innerText = `[Guru] ${namaGuru}`;
+        } else if (dataSesiTerbaru.nama) {
+            userNameDisplay.innerText = dataSesiTerbaru.nama;
+        } else if (dataSesiTerbaru.nisn) {
+            userNameDisplay.innerText = `Siswa (${dataSesiTerbaru.nisn})`;
         } else {
             userNameDisplay.innerText = "Siswa Informatika";
         }
@@ -133,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoutBtn.style.display = 'inline-block';
         logoutBtn.addEventListener('click', () => {
             if (confirm("Apakah Anda yakin ingin keluar dari akun ini?")) {
-                localStorage.clear();
+                localStorage.clear(); // Bersihkan seluruh memori login
                 window.location.href = loginUrlLengkap;
             }
         });
