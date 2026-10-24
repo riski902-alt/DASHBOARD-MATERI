@@ -132,205 +132,112 @@
     <nav class="nav-wrapper"><div class="nav-container" id="menu-container"></div></nav>
     <main class="content-area" id="main-content"></main>
 
-	<script type="module">
-    // Import fungsi pembuat komponen yang tadi kita buat
+	<!-- Pastikan tag script menggunakan type="module" -->
+<script type="module">
+    // 1. MENGIMPOR KOMPONEN
+    // Kita memanggil ke-7 fungsi yang sudah kamu buat di file komponen-menu.js
     import { 
         buatKomponenATP, 
         buatKomponenAsesmenAwal, 
         buatKomponenPertanyaanEsensial,
-        buatKomponenEksplorasiKonsep
+        buatKomponenEksplorasiKonsep,
+        buatKomponenForLearning,
+        buatKomponenPenerapanKonsep,
+        buatKomponenAsLearning
     } from './komponen-menu.js';
 
-    // ... (kode pengecekan login tetap di sini) ...
+    // ... (Jika kamu punya kode untuk cek login/hal lain, biarkan di sini) ...
 
+    // 2. FUNGSI UNTUK MEMUAT DAN MENAMPILKAN DATA
     async function muatDataMateri() {
         try {
+            // Mengambil data dari file JSON kamu
             const response = await fetch('materi_2.json');
             const dataSemuaMateri = await response.json();
+            
+            // Mengambil ID dari URL (misal: website.com/index.html?id=kelas7-sem1-bab1-pertemuan1)
             const currentId = new URLSearchParams(window.location.search).get('id');
             const dataMateri = dataSemuaMateri[currentId];
 
-            if (!dataMateri) return alert("Materi tidak ditemukan!");
+            if (!dataMateri) {
+                alert("Materi tidak ditemukan!");
+                return;
+            }
 
-            // Perbarui Judul
+            // Memperbarui teks Judul Bab dan Pertemuan di HTML kamu
+            // Pastikan kamu punya elemen dengan id 'judul-bab' dan 'pertemuan-info' di HTML-mu
             document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
             document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
 
-            // BANGUN MENU MENGGUNAKAN KOMPONEN!
-            learningMenus = [
-                { id: "atp", title: "ATP", icon: "ph-target", btnText: "SELESAI DIBACA", 
-                  html: buatKomponenATP(dataMateri.konten.atp) },
-                  
-                { id: "asesmen-awal", title: "ASESMEN AWAL", icon: "ph-clipboard-text", btnText: "KIRIM JAWABAN", 
-                  html: buatKomponenAsesmenAwal(dataMateri.konten["asesmen-awal"]) },
-                  
-                { id: "pertanyaan-esensial", title: "PERTANYAAN ESENSIAL", icon: "ph-lightbulb", btnText: "SIMPAN JAWABAN", 
-                  html: buatKomponenPertanyaanEsensial(dataMateri.konten["pertanyaan-esensial"]) },
-                  
-                { id: "eksplorasi-konsep", title: "EKSPLORASI KONSEP", icon: "ph-compass", btnText: "SELESAI BACA SLIDE", 
-                  html: buatKomponenEksplorasiKonsep(dataMateri.konten["eksplorasi-konsep"]) }
-                  
-                // Lanjutkan untuk menu lainnya...
+            // 3. MEMBANGUN STRUKTUR MENU
+            // Di sinilah keajaibannya terjadi! Kita memasukkan data JSON ke dalam fungsi komponen.
+            // Parameter seperti 'dataMateri.konten.atp' adalah data yang akan diproses oleh komponen-menu.js
+            let learningMenus = [
+                { 
+                    id: "atp", 
+                    title: "ATP", 
+                    icon: "ph-target", 
+                    btnText: "SELESAI DIBACA", 
+                    html: buatKomponenATP(dataMateri.konten.atp) 
+                },
+                { 
+                    id: "asesmen-awal", 
+                    title: "ASESMEN AWAL", 
+                    icon: "ph-clipboard-text", 
+                    btnText: "KIRIM JAWABAN", 
+                    html: buatKomponenAsesmenAwal(dataMateri.konten["asesmen-awal"]) 
+                },
+                { 
+                    id: "pertanyaan-esensial", 
+                    title: "PERTANYAAN ESENSIAL", 
+                    icon: "ph-lightbulb", 
+                    btnText: "SIMPAN JAWABAN", 
+                    html: buatKomponenPertanyaanEsensial(dataMateri.konten["pertanyaan-esensial"]) 
+                },
+                { 
+                    id: "eksplorasi-konsep", 
+                    title: "EKSPLORASI KONSEP", 
+                    icon: "ph-compass", 
+                    btnText: "SELESAI BACA SLIDE", 
+                    html: buatKomponenEksplorasiKonsep(dataMateri.konten["eksplorasi-konsep"]) 
+                },
+                { 
+                    id: "for-learning", 
+                    title: "FOR LEARNING", 
+                    icon: "ph-pencil-simple", 
+                    btnText: "CEK HASIL KUIS", 
+                    html: buatKomponenForLearning(dataMateri.konten["for-learning"]) 
+                },
+                { 
+                    id: "penerapan-konsep", 
+                    title: "PENERAPAN KONSEP", 
+                    icon: "ph-hammer", 
+                    btnText: "KUMPULKAN TUGAS", 
+                    html: buatKomponenPenerapanKonsep(dataMateri.konten["penerapan-konsep"]) 
+                },
+                { 
+                    id: "as-learning", 
+                    title: "AS LEARNING", 
+                    icon: "ph-plant", 
+                    btnText: "SIMPAN REFLEKSI", 
+                    html: buatKomponenAsLearning(dataMateri.konten["as-learning"]) 
+                }
             ];
 
-            initContent();
-            renderMenu();
-            switchTab(currentActiveMenuId);
+            // 4. MENAMPILKAN KE LAYAR
+            // Ini berasumsi kamu sudah punya fungsi ini dari kode sebelumnya
+            // untuk mengatur tata letak tombol menu dan berpindah tab
+            initContent(learningMenus);
+            renderMenu(learningMenus);
+            switchTab(learningMenus[0].id); // Langsung buka tab pertama (ATP) saat dimuat
 
         } catch (error) {
             console.error("Gagal memuat:", error);
         }
     }
     
-    // ... sisa kode lainnya ...
-
+    // Jalankan fungsi saat halaman web selesai dimuat
+    window.onload = muatDataMateri;
 </script>
-
-    <script type="module">
-        // 1. CEK LOGIN MELALUI LOCALSTORAGE (PERBAIKAN LANGKAH 3)
-        const userRole = localStorage.getItem("userRole");
-        const userName = localStorage.getItem("userName");
-
-        // Jika bukan siswa dan bukan guru, paksa kembali ke halaman login
-        if (userRole !== "siswa" && userRole !== "guru") {
-            alert("Anda harus login terlebih dahulu untuk mengakses materi ini.");
-            const currentId = new URLSearchParams(window.location.search).get('id');
-            window.location.href = `../LOGIN-MATERI/index.html?redirect=${currentId}`;
-        }
-
-        // 2. TAMPILKAN PROFIL DAN TOMBOL LOGOUT
-        const userNameDisplay = document.getElementById('user-name-display');
-        const logoutBtn = document.getElementById('logout-btn');
-
-        if (userRole === "siswa") {
-            userNameDisplay.innerText = `Halo, ${userName}`;
-            logoutBtn.style.display = 'inline-block';
-        } else if (userRole === "guru") {
-            userNameDisplay.innerText = `Halo, Guru`;
-            logoutBtn.style.display = 'inline-block';
-        }
-
-        // Logika Logout
-        logoutBtn.addEventListener('click', () => {
-            localStorage.clear(); // Hapus memori login jangka panjang
-            window.location.href = "../LOGIN-MATERI/index.html"; // Arahkan kembali ke halaman login
-        });
-
-        // 3. IMPORT & KONFIGURASI FIREBASE (Dipertahankan untuk fitur simpan jawaban)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-        // Ganti dengan kredensial Firebase asli milikmu
-        const firebaseConfig = {
-            apiKey: "AIzaSyYOUR_API_KEY_HERE",
-            authDomain: "databasemateriinformatika.firebaseapp.com",
-            projectId: "databasemateriinformatika",
-            storageBucket: "databasemateriinformatika.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcdef"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // 4. STRUKTUR MENU KONTEN & APLIKASI (Kode Asli Anda)
-        const learningMenus = [
-            { id: "atp", title: "ATP", icon: "ph-target", btnText: "SELESAI DIBACA", 
-              html: `<div class="bento-grid"><div class="bento-card highlight"><div class="card-icon-wrapper"><i class="ph-fill ph-flag-checkered"></i></div><h3 class="bento-title">Capaian Pembelajaran</h3><p>Siswa mampu memahami konsep dasar berpikir komputasional.</p></div></div>` },
-            { id: "asesmen-awal", title: "ASESMEN AWAL", icon: "ph-clipboard-text", btnText: "KIRIM JAWABAN", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Kuis Diagnostik</h3><input type="text" placeholder="Ketik jawabanmu..." style="width:100%; padding:10px; border-radius:8px;"></div></div>` },
-            { id: "pertanyaan-esensial", title: "PERTANYAAN ESENSIAL", icon: "ph-lightbulb", btnText: "KIRIM JAWABAN", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Pemantik</h3><p>Bagaimana cara komputer bekerja?</p></div></div>` },
-            { id: "eksplorasi-konsep", title: "EKSPLORASI KONSEP", icon: "ph-compass", btnText: "SELESAI DIBACA", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Bahan Bacaan</h3><p>Silakan baca modul.</p></div></div>` },
-            { id: "for-learning", title: "FOR LEARNING", icon: "ph-chats-circle", btnText: "KIRIM JAWABAN", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Diskusi</h3><textarea rows="3" style="width:100%; padding:10px; border-radius:8px;"></textarea></div></div>` },
-            { id: "penerapan-konsep", title: "PENERAPAN KONSEP", icon: "ph-laptop", btnText: "KIRIM JAWABAN", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Praktek</h3><p>Praktek Scratch.</p></div></div>` },
-            { id: "as-learning", title: "AS LEARNING", icon: "ph-brain", btnText: "KIRIM JAWABAN", 
-              html: `<div class="bento-grid"><div class="bento-card"><h3 class="bento-title">Refleksi</h3><input type="text" style="width:100%; padding:10px; border-radius:8px;"></div></div>` }
-        ];
-
-        let userProgress = { "atp": 1, "asesmen-awal": 0, "pertanyaan-esensial": 0, "eksplorasi-konsep": 0, "for-learning": 0, "penerapan-konsep": 0, "as-learning": 0 };
-        let currentActiveMenuId = "atp";
-
-        const menuContainer = document.getElementById('menu-container');
-        const mainContent = document.getElementById('main-content');
-        
-        function initContent() {
-            mainContent.innerHTML = ''; 
-            learningMenus.forEach(menu => {
-                const section = document.createElement('div');
-                section.className = `tab-content ${menu.id === currentActiveMenuId ? 'active' : ''}`;
-                section.id = `content-${menu.id}`;
-                section.innerHTML = menu.html;
-
-                const actionBtn = document.createElement('button');
-                actionBtn.className = 'action-button';
-                actionBtn.id = `btn-${menu.id}`;
-                actionBtn.innerHTML = `${menu.btnText}`;
-                actionBtn.onclick = () => completeCurrentMenu(menu.id);
-                
-                section.appendChild(actionBtn);
-                mainContent.appendChild(section);
-            });
-        }
-
-        function renderMenu() {
-            menuContainer.innerHTML = '';
-            learningMenus.forEach(menu => {
-                const btn = document.createElement('button');
-                btn.className = `nav-btn ${menu.id === currentActiveMenuId ? 'active' : ''}`;
-                
-                if (userProgress[menu.id] === 0) {
-                    btn.classList.add('locked');
-                } else if (userProgress[menu.id] === 2) {
-                    btn.classList.add('completed');
-                }
-                
-                btn.innerHTML = `<i class="ph-fill ${menu.icon}"></i> <span>${menu.title}</span>`;
-                btn.addEventListener('click', () => { if (userProgress[menu.id] !== 0) switchTab(menu.id); });
-                menuContainer.appendChild(btn);
-            });
-            updateProgressUI();
-        }
-
-        function switchTab(menuId) {
-            currentActiveMenuId = menuId;
-            renderMenu();
-            
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(`content-${menuId}`).classList.add('active');
-        }
-
-        function completeCurrentMenu(menuId) {
-            userProgress[menuId] = 2; 
-            
-            const actionBtn = document.getElementById(`btn-${menuId}`);
-            actionBtn.innerHTML = `<i class="ph-fill ph-check"></i> SELESAI`;
-            actionBtn.disabled = true;
-
-            const currentIndex = learningMenus.findIndex(m => m.id === menuId);
-            if (currentIndex < learningMenus.length - 1) {
-                const nextMenuId = learningMenus[currentIndex + 1].id;
-                if (userProgress[nextMenuId] === 0) userProgress[nextMenuId] = 1; 
-                switchTab(nextMenuId); 
-            } else {
-                switchTab(menuId);
-            }
-        }
-
-        function updateProgressUI() {
-            const selesai = Object.values(userProgress).filter(v => v === 2).length;
-            const total = learningMenus.length;
-            const persentase = Math.round((selesai / total) * 100);
-            document.getElementById('progress-text').innerText = `${selesai} dari ${total} menu selesai (${persentase}%)`;
-            document.getElementById('progress-fill').style.width = `${persentase}%`;
-        }
-
-        initContent();
-        renderMenu();
-        switchTab(currentActiveMenuId);
-    </script>
 </body>
 </html>
