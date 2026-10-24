@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
+    <!-- TAMBAHAN: Firebase SDK versi 8 (Kompatibel untuk CDN murni) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
     <!-- Skrip Pemeriksa Login & Handler Menu -->
     <script src="cek-login.js"></script>
     <script src="menu-handler.js"></script>
@@ -42,20 +46,7 @@
         .user-profile { font-family: var(--font-nav); font-size: 0.9rem; color: var(--soft-gold); display: flex; align-items: center; gap: 8px;}
 
         /* TOMBOL LOGOUT */
-        .logout-btn {
-            background-color: transparent;
-            color: var(--status-red);
-            border: 1px solid var(--status-red);
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-family: var(--font-nav);
-            font-size: 0.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-left: 8px;
-            display: none;
-        }
+        .logout-btn { background-color: transparent; color: var(--status-red); border: 1px solid var(--status-red); padding: 4px 12px; border-radius: 6px; font-family: var(--font-nav); font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease; margin-left: 8px; display: none; }
         .logout-btn:hover { background-color: var(--status-red); color: var(--text-main); }
 
         .header-section { padding: 30px 5% 10px 5%; display: flex; flex-direction: column; gap: 15px; }
@@ -110,15 +101,15 @@
             </div>
             
             <div class="progress-section">
-    <h4>PROGRES PEMBELAJARAN</h4>
-    <!-- Teks Progres -->
-    <p id="progress-text">0 dari 7 menu selesai (0%)</p>
-    
-    <!-- Garis Progres -->
-    <div class="progress-bar-bg" style="width: 100%; height: 10px; background-color: #2a4b75; border-radius: 5px;">
-        <div id="progress-fill" style="width: 0%; height: 100%; background-color: #88D4AB; border-radius: 5px; transition: width 0.5s ease;"></div>
-    </div>
-</div>
+                <h4>PROGRES PEMBELAJARAN</h4>
+                <!-- Teks Progres -->
+                <p id="progress-text">0 dari 7 menu selesai (0%)</p>
+                
+                <!-- Garis Progres -->
+                <div class="progress-bar-bg" style="width: 100%; height: 10px; background-color: #2a4b75; border-radius: 5px;">
+                    <div id="progress-fill" style="width: 0%; height: 100%; background-color: #88D4AB; border-radius: 5px; transition: width 0.5s ease;"></div>
+                </div>
+            </div>
 
             <!-- CONTAINER 7 TOMBOL MENU -->
             <nav class="learning-menu-container">
@@ -127,37 +118,31 @@
                     <span class="menu-text">ATP</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-asesmen-awal" disabled>
                     <div class="menu-icon"><i class="ph ph-clipboard-text"></i></div>
                     <span class="menu-text">Asesmen Awal</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-pertanyaan-esensial" disabled>
                     <div class="menu-icon"><i class="ph ph-lightbulb"></i></div>
                     <span class="menu-text">Pertanyaan Esensial</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-eksplorasi-konsep" disabled>
                     <div class="menu-icon"><i class="ph ph-monitor-play"></i></div>
                     <span class="menu-text">Eksplorasi Konsep</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-for-learning" disabled>
                     <div class="menu-icon"><i class="ph ph-target"></i></div>
                     <span class="menu-text">For Learning</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-penerapan-konsep" disabled>
                     <div class="menu-icon"><i class="ph ph-laptop"></i></div>
                     <span class="menu-text">Penerapan Konsep</span>
                     <div class="menu-status"><i class="ph ph-lock-key"></i></div>
                 </button>
-
                 <button class="menu-btn locked" id="btn-as-learning" disabled>
                     <div class="menu-icon"><i class="ph ph-brain"></i></div>
                     <span class="menu-text">As Learning</span>
@@ -208,52 +193,93 @@
 
         muatDataMateri();
     </script>
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. Tentukan total menu
-    const totalMenus = 7;
-    
-    // 2. Ambil elemen yang akan diubah
-    const progressText = document.getElementById("progress-text");
-    const progressFill = document.getElementById("progress-fill");
-    const menuButtons = document.querySelectorAll(".menu-btn");
 
-    // 3. Ambil data progres dari localStorage (jika sudah ada)
-    // Format penyimpanannya adalah array berisi ID menu, contoh: ["menu-1", "menu-2"]
-    let completedMenus = JSON.parse(localStorage.getItem("progresBelajar")) || [];
-
-    // Fungsi untuk memperbarui tampilan UI progres
-    function updateProgressUI() {
-        const completedCount = completedMenus.length;
-        const percentage = Math.round((completedCount / totalMenus) * 100);
-
-        // Update teks
-        progressText.innerText = `${completedCount} dari ${totalMenus} menu selesai (${percentage}%)`;
+    <!-- SKRIP FIREBASE & PROGRES -->
+    <script>
+        // 1. KONFIGURASI FIREBASE (GANTI DENGAN DATA DARI FIREBASE CONSOLE ANDA)
+        const firebaseConfig = {
+            apiKey: "API_KEY_ANDA",
+            authDomain: "PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "PROJECT_ID",
+            storageBucket: "PROJECT_ID.appspot.com",
+            messagingSenderId: "SENDER_ID",
+            appId: "APP_ID"
+        };
         
-        // Update lebar warna progres (hijau)
-        progressFill.style.width = `${percentage}%`;
-    }
+        // Inisialisasi Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
 
-    // 4. Tambahkan event klik ke semua tombol menu
-    menuButtons.forEach(button => {
-        button.addEventListener("click", function() {
-            const menuId = this.id; // Ambil ID tombol yang diklik
+        document.addEventListener("DOMContentLoaded", function() {
+            const totalMenus = 7;
+            const progressText = document.getElementById("progress-text");
+            const progressFill = document.getElementById("progress-fill");
+            
+            // Asumsi: Anda menyimpan userId siswa yang sedang login di localStorage (misal dari cek-login.js)
+            // Jika Anda menggunakan nama variabel lain, sesuaikan di sini.
+            const userId = localStorage.getItem("currentUserId") || "siswa_dummy_01"; 
+            const dbRef = database.ref('users/' + userId + '/progres_bab1');
 
-            // Cek apakah menu ini belum ada di daftar selesai
-            if (!completedMenus.includes(menuId)) {
-                completedMenus.push(menuId); // Tambahkan ke daftar
-                
-                // Simpan pembaruan ke localStorage
-                localStorage.setItem("progresBelajar", JSON.stringify(completedMenus));
-                
-                // Perbarui tampilan
-                updateProgressUI();
+            // Fungsi untuk memperbarui tampilan UI progres
+            function updateProgressUI(completedMenusArray) {
+                const completedCount = completedMenusArray.length;
+                const percentage = Math.round((completedCount / totalMenus) * 100);
+
+                // Update teks dan lebar bar progres
+                progressText.innerText = `${completedCount} dari ${totalMenus} menu selesai (${percentage}%)`;
+                progressFill.style.width = `${percentage}%`;
+
+                // Update warna tombol menu yang sudah selesai (Opsional)
+                completedMenusArray.forEach(menuId => {
+                    const btn = document.getElementById(menuId);
+                    if(btn) {
+                        btn.classList.add("completed");
+                        btn.classList.remove("locked");
+                        // Ganti ikon gembok jadi centang (opsional)
+                        const statusIcon = btn.querySelector('.menu-status i');
+                        if(statusIcon) {
+                            statusIcon.className = 'ph ph-check-circle';
+                        }
+                    }
+                });
             }
-        });
-    });
 
-    // 5. Jalankan fungsi saat halaman pertama kali dimuat
-    updateProgressUI();
-});
-    
+            // 2. BACA DARI LOCALSTORAGE (Untuk Load Cepat)
+            const localKey = `progresBelajar_${userId}`;
+            let completedMenus = JSON.parse(localStorage.getItem(localKey)) || [];
+            updateProgressUI(completedMenus);
+
+            // 3. SINKRONISASI DARI FIREBASE (Real-time listener)
+            dbRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    // Konversi objek database (ex: { 'btn-atp': true }) menjadi array ['btn-atp']
+                    const completedFromDb = Object.keys(data);
+                    
+                    // Simpan ke localStorage agar sinkron
+                    localStorage.setItem(localKey, JSON.stringify(completedFromDb));
+                    
+                    // Update UI
+                    updateProgressUI(completedFromDb);
+                }
+            });
+
+            // 4. FUNGSI GLOBAL UNTUK MENANDAI SELESAI
+            // Fungsi ini sekarang BISA dipanggil dari dalam materi/kuis
+            window.tandaiMenuSelesai = function(menuId) {
+                // Simpan ke Firebase
+                dbRef.child(menuId).set(true)
+                .then(() => {
+                    console.log(`${menuId} berhasil disimpan ke Firebase!`);
+                })
+                .catch((error) => {
+                    console.error("Gagal menyimpan ke Firebase:", error);
+                });
+            };
+        });
+    </script>
 </body>
 </html>
