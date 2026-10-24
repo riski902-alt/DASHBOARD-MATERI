@@ -182,18 +182,9 @@
 			
     </section>
 
-	<!-- Pastikan tag script menggunakan type="module" -->
+	<!-- ... (Kode HTML kotak biru dan tombol menu kamu ada di atas sini) ... -->
+
 <script type="module">
-    // 1. MENGIMPOR KOMPONEN
-    // Kita memanggil ke-7 fungsi yang sudah kamu buat di file komponen-menu.js
-    import {
-        buatKomponenATP,
-        buatKomponenAsesmenAwal,
-        buatKomponenPertanyaanEsensial,
-        buatKomponenEksplorasiKonsep,
-        buatKomponenForLearning,
-        buatKomponenPenerapanKonsep,
-        <script type="module">
     import {
         buatKomponenATP,
         buatKomponenAsesmenAwal,
@@ -204,41 +195,38 @@
         buatKomponenAsLearning
     } from './komponen-menu.js';
 
-    // 2. FUNGSI UNTUK MEMUAT DAN MENAMPILKAN DATA
     async function muatDataMateri() {
-        try { // <--- BLOK TRY DIBUKA DI SINI
-            
-            // Mengambil data dari file JSON kamu
+        try {
             const response = await fetch('materi.json');
-            
-            // Pengecekan status
-            if (!response.ok) {
-                throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`Gagal memuat: ${response.status}`);
             const dataSemuaMateri = await response.json();
-            
-            // Mengambil ID dari URL
             const currentId = new URLSearchParams(window.location.search).get('id');
             const dataMateri = dataSemuaMateri[currentId];
 
-            if (!dataMateri) {
-                alert("Materi tidak ditemukan!");
-                return;
-            }
+            if (!dataMateri) return alert("Materi tidak ditemukan!");
 
-            // Memperbarui teks Judul Bab dan Pertemuan di HTML
             document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
             document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
 
-        } catch (error) { // <--- INI ADALAH PENUTUP TRY DAN PEMBUKA CATCH YANG TERPOTONG
-            console.error("Terjadi kesalahan:", error);
-        } // <--- INI ADALAH PENUTUP CATCH
-    } // <--- INI ADALAH PENUTUP FUNGSI MUATDATAMATERI
+            // ========================================================
+            // PASTIKAN KODE YANG BOCOR TADI DIMASUKKAN KE DALAM SINI
+            // ========================================================
+            // 3. MEMBANGUN STRUKTUR MENU
+            let learningMenus = [
+                // ... (seluruh kode pembuat menu kamu) ...
+            ];
 
-    // Menjalankan fungsi saat halaman dimuat (INI JUGA TERPOTONG SEBELUMNYA)
+            // 4. MENAMPILKAN KE LAYAR
+            // renderMenu(learningMenus);
+            // switchTab(learningMenus[0].id);
+
+        } catch (error) {
+            console.error("Terjadi kesalahan:", error);
+        }
+    } 
+
     muatDataMateri();
 </script>
-
 
 <!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
 <div id="dynamic-content-area" class="content-area">
