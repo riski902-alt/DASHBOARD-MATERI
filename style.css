@@ -345,3 +345,51 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
     .menu-icon i { font-size: 24px; }
     .menu-text { font-size: 0.75rem; }
 }
+/* =========================================
+   KODE BARU: 7 MENU PEMBELAJARAN
+   ========================================= */
+/* Variabel warna dasar (berjaga-jaga jika belum ada) */
+:root {
+    --menu-border: rgba(255, 255, 255, 0.2);
+    --menu-text: #ffffff;
+}
+
+/* Mengatur wadah agar tombol berjejer menyamping */
+.learning-menu-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 12px;
+    padding: 15px 5px;
+    margin-top: 15px; /* Memberi jarak dengan kotak di atasnya */
+}
+
+/* Mengatur bentuk dasar tombol */
+.menu-btn {
+    flex: 0 0 auto;
+    min-width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    /* Memberi warna latar biru gelap agar tombol terlihat nyata */
+    background-color: #152C5B; 
+    border: 1px solid var(--menu-border);
+    border-radius: 12px;
+    color: var(--menu-text);
+    cursor: pointer;
+    position: relative;
+}
+
+/* Mengatur jarak dan ukuran tulisan/ikon di dalam tombol */
+.menu-icon i { font-size: 28px; margin-bottom: 8px; }
+.menu-text { font-family: sans-serif; font-size: 0.85rem; font-weight: 600; text-align: center; }
+.menu-status { position: absolute; top: 8px; right: 8px; font-size: 14px; }
+
+/* Mengubah warna tombol menjadi redup jika statusnya terkunci (disabled) */
+.menu-btn.locked {
+    background-color: #9ca3af; 
+    opacity: 0.8;
+    cursor: not-allowed;
+}
