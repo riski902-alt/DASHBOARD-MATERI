@@ -141,15 +141,17 @@
 <script type="module">
     // 1. MENGIMPOR KOMPONEN
     // Kita memanggil ke-7 fungsi yang sudah kamu buat di file komponen-menu.js
-    import { 
-        buatKomponenATP, 
-        buatKomponenAsesmenAwal, 
+    import {
+        buatKomponenATP,
+        buatKomponenAsesmenAwal,
         buatKomponenPertanyaanEsensial,
         buatKomponenEksplorasiKonsep,
         buatKomponenForLearning,
         buatKomponenPenerapanKonsep,
         buatKomponenAsLearning
     } from './komponen-menu.js';
+</script> 
+
 <!-- KODE PENGGANTI UNTUK TOMBOL LAMA (KOTAK MERAH) -->
 <nav class="learning-menu-container">
     <button class="menu-btn locked" data-menu="atp" id="btn-atp" disabled>
@@ -194,7 +196,7 @@
         <div class="menu-status"><i class="ph ph-lock-key lock-icon"></i></div>
     </button>
 </nav>
-
+	
 <!-- Letakkan ini tepat di bawah nav, ini area untuk memunculkan materi -->
 <div id="dynamic-content-area" class="content-area">
     <!-- Konten JSON akan dimuat di sini -->
