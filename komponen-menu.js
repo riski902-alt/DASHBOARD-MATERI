@@ -10,12 +10,11 @@ export function buatKomponenATP(dataATP) {
     `;
 }
 
-// 2. KOMPONEN ASESMEN AWAL (Contoh untuk Pilihan Ganda)
+// 2. KOMPONEN ASESMEN AWAL
 export function buatKomponenAsesmenAwal(dataSoalArray) {
     let htmlSoal = `<div class="kuis-container">
                         <h3 style="margin-bottom: 20px;">📝 Asesmen Awal</h3>`;
     
-    // Looping (mengulang) pembuatan soal berdasarkan jumlah data di JSON
     dataSoalArray.forEach((soal, index) => {
         htmlSoal += `
             <div class="soal-box" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
@@ -23,7 +22,7 @@ export function buatKomponenAsesmenAwal(dataSoalArray) {
                 <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
                     ${soal.opsi.map((pilihan, i) => `
                         <label>
-                            <input type="radio" name="soal_${index}" value="${i}"> ${pilihan}
+                            <input type="radio" name="soal_awal_${index}" value="${i}"> ${pilihan}
                         </label>
                     `).join('')}
                 </div>
@@ -31,8 +30,8 @@ export function buatKomponenAsesmenAwal(dataSoalArray) {
         `;
     });
 
-    htmlSoal += `<button id="btn-cek-skor" class="action-button" style="background:#88D4AB; color:#1E3A5F;">CEK SKOR</button>
-                 <div id="hasil-skor" style="margin-top:15px; font-weight:bold; font-size:1.2rem;"></div>
+    htmlSoal += `<button id="btn-cek-skor-awal" class="action-button" style="background:#88D4AB; color:#1E3A5F;">CEK SKOR</button>
+                 <div id="hasil-skor-awal" style="margin-top:15px; font-weight:bold; font-size:1.2rem;"></div>
                  </div>`;
                  
     return htmlSoal;
@@ -49,7 +48,7 @@ export function buatKomponenPertanyaanEsensial(pertanyaan) {
     `;
 }
 
-// 4. KOMPONEN EKSPLORASI KONSEP (Menampilkan Slide Presentasi)
+// 4. KOMPONEN EKSPLORASI KONSEP
 export function buatKomponenEksplorasiKonsep(linkSlide) {
     return `
         <div class="komponen-slide">
@@ -59,5 +58,51 @@ export function buatKomponenEksplorasiKonsep(linkSlide) {
     `;
 }
 
-// 5, 6, 7 (Lanjutkan pola yang sama untuk For Learning, Penerapan, dan As Learning)
-// ...
+// 5. KOMPONEN FOR LEARNING (Kuis Formatif)
+export function buatKomponenForLearning(dataSoalArray) {
+    let htmlSoal = `<div class="kuis-container">
+                        <h3 style="margin-bottom: 20px;">🎯 Kuis Formatif (For Learning)</h3>`;
+    
+    dataSoalArray.forEach((soal, index) => {
+        htmlSoal += `
+            <div class="soal-box" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
+                <p><strong>Soal ${index + 1}:</strong> ${soal.soal}</p>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+                    ${soal.opsi.map((pilihan, i) => `
+                        <label>
+                            <input type="radio" name="soal_for_${index}" value="${i}"> ${pilihan}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    });
+
+    htmlSoal += `<button id="btn-cek-skor-for" class="action-button" style="background:#88D4AB; color:#1E3A5F;">CEK SKOR & PEMBAHASAN</button>
+                 <div id="hasil-skor-for" style="margin-top:15px; font-weight:bold; font-size:1.2rem;"></div>
+                 </div>`;
+                 
+    return htmlSoal;
+}
+
+// 6. KOMPONEN PENERAPAN KONSEP (Tugas Praktik)
+export function buatKomponenPenerapanKonsep(instruksi) {
+    return `
+        <div class="komponen-penerapan">
+            <h3 style="color: #4A7298; border-bottom: 2px solid #88D4AB; padding-bottom: 10px;">🛠️ Penerapan Konsep</h3>
+            <p style="font-size: 1.1rem; margin: 15px 0;">${instruksi}</p>
+            <textarea id="jawaban-penerapan" rows="6" placeholder="Ketik hasil kerja / tautan tugasmu di sini..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
+        </div>
+    `;
+}
+
+// 7. KOMPONEN AS LEARNING (Refleksi)
+export function buatKomponenAsLearning(refleksi) {
+    return `
+        <div class="komponen-refleksi">
+            <h3 style="color: #4A7298; border-bottom: 2px solid #88D4AB; padding-bottom: 10px;">🌱 Refleksi Diri (As Learning)</h3>
+            <p style="font-size: 1.1rem; font-weight: bold; margin: 15px 0;">${refleksi}</p>
+            <textarea id="jawaban-refleksi" rows="5" placeholder="Tuliskan refleksimu hari ini..." style="width:100%; padding:15px; border-radius:8px; border:1px solid #ccc;"></textarea>
+        </div>
+    `;
+}
