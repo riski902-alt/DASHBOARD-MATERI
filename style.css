@@ -275,32 +275,31 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
 /* Container Bento Grid Horizontal */
 .learning-menu-container {
     display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
+    flex-wrap/* 1. MENGATUR WADAH TOMBOL */
+.learning-menu-container {
+    display: flex;
+    width: 100%; /* INI PENTING: Memaksa wadah agar penuh dari ujung kiri ke kanan */
     gap: 12px;
-    padding: 15px 5px;
-    -webkit-overflow-scrolling: touch; /* Halus di iOS */
-    scrollbar-width: thin;
+    padding: 15px 0; /* Padding atas bawah 15px, kiri kanan 0 */
+    margin-top: 15px;
+    overflow-x: auto; /* Jika dibuka di HP, tombol tetap bisa digeser (scroll) */
 }
 
-/* Desain Dasar Tombol (Glassmorphism) */
+/* 2. MENGATUR TOMBOL */
 .menu-btn {
-    flex: 0 0 auto;
-    min-width: 140px;
+    flex: 1 1 0; /* INI PENTING: flex-grow 1, shrink 1, basis 0. Artinya membagi sisa ruang secara rata! */
+    min-width: 100px; /* Batas aman agar tulisan tidak terlalu tergencet */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 15px 10px;
-    background: var(--menu-bg-normal);
-    backdrop-filter: blur(10px);
+    background-color: #152C5B; 
     border: 1px solid var(--menu-border);
-    border-radius: 16px; /* Sudut membulat modern */
+    border-radius: 12px;
     color: var(--menu-text);
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .menu-icon i { font-size: 28px; margin-bottom: 8px; }
