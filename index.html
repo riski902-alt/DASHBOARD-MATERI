@@ -208,5 +208,52 @@
 
         muatDataMateri();
     </script>
+document.addEventListener("DOMContentLoaded", function() {
+    // 1. Tentukan total menu
+    const totalMenus = 7;
+    
+    // 2. Ambil elemen yang akan diubah
+    const progressText = document.getElementById("progress-text");
+    const progressFill = document.getElementById("progress-fill");
+    const menuButtons = document.querySelectorAll(".menu-btn");
+
+    // 3. Ambil data progres dari localStorage (jika sudah ada)
+    // Format penyimpanannya adalah array berisi ID menu, contoh: ["menu-1", "menu-2"]
+    let completedMenus = JSON.parse(localStorage.getItem("progresBelajar")) || [];
+
+    // Fungsi untuk memperbarui tampilan UI progres
+    function updateProgressUI() {
+        const completedCount = completedMenus.length;
+        const percentage = Math.round((completedCount / totalMenus) * 100);
+
+        // Update teks
+        progressText.innerText = `${completedCount} dari ${totalMenus} menu selesai (${percentage}%)`;
+        
+        // Update lebar warna progres (hijau)
+        progressFill.style.width = `${percentage}%`;
+    }
+
+    // 4. Tambahkan event klik ke semua tombol menu
+    menuButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const menuId = this.id; // Ambil ID tombol yang diklik
+
+            // Cek apakah menu ini belum ada di daftar selesai
+            if (!completedMenus.includes(menuId)) {
+                completedMenus.push(menuId); // Tambahkan ke daftar
+                
+                // Simpan pembaruan ke localStorage
+                localStorage.setItem("progresBelajar", JSON.stringify(completedMenus));
+                
+                // Perbarui tampilan
+                updateProgressUI();
+            }
+        });
+    });
+
+    // 5. Jalankan fungsi saat halaman pertama kali dimuat
+    updateProgressUI();
+});
+    
 </body>
 </html>
