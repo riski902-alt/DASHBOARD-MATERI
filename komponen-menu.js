@@ -10,30 +10,16 @@ export function buatKomponenATP(dataATP) {
     `;
 }
 
-// 2. KOMPONEN ASESMEN AWAL
-export function buatKomponenAsesmenAwal(dataSoalArray) {
-    let htmlSoal = `<div class="kuis-container">
-                        <h3 style="margin-bottom: 20px;">📝 Asesmen Awal</h3>`;
-    
-    dataSoalArray.forEach((soal, index) => {
-        htmlSoal += `
-            <div class="soal-box" style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #e2e8f0;">
-                <p><strong>Soal ${index + 1}:</strong> ${soal.soal}</p>
-                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-                    ${soal.opsi.map((pilihan, i) => `
-                        <label>
-                            <input type="radio" name="soal_awal_${index}" value="${i}"> ${pilihan}
-                        </label>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    });
-
-    htmlSoal += `<button id="btn-cek-skor-awal" class="action-button" style="background:#88D4AB; color:#1E3A5F;">CEK SKOR</button>
-                 <div id="hasil-skor-awal" style="margin-top:15px; font-weight:bold; font-size:1.2rem;"></div>
-                 </div>`;
-                 
+// 2. KOMPONEN ASESMEN AWAL (Menggunakan Iframe)
+export function buatKomponenAsesmenAwal(urlHalaman) {
+    // Parameter urlHalaman akan berisi teks seperti "materi/kelas7/.../p1-asesmen.html"
+    let htmlSoal = `
+        <div class="kuis-container">
+            <h3 style="margin-bottom: 20px;">📝 Asesmen Awal</h3>
+            <!-- Menggunakan iframe untuk memuat file HTML dari dalam folder -->
+            <iframe src="${urlHalaman}" width="100%" height="500px" style="border: 1px solid #e2e8f0; border-radius: 8px;"></iframe>
+        </div>
+    `;
     return htmlSoal;
 }
 
