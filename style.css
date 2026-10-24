@@ -136,20 +136,21 @@ h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; }
 }
 
 /* Desain dasar untuk masing-masing tombol (Bento Grid Style) */
+/* Mengatur bentuk dasar tombol */
 .menu-btn {
-    background-color: var(--pure-white); 
-    color: var(--navy-blue); 
-    border: 1px solid var(--pale-blue); 
-    padding: 12px 20px; 
-    border-radius: 12px; 
-    font-size: 14px;
-    font-weight: 600; 
-    cursor: pointer; 
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-    box-shadow: 0 2px 5px rgba(36, 59, 83, 0.05); /* Bayangan lembut */
-    flex: 1 1 120px; /* Lebar minimum tombol */
-    max-width: 200px;
-    text-align: center;
+    flex: 1; /* KODE BARU: Membiarkan tombol membesar dan membagi ruang sama rata */
+    min-width: 120px; /* Batas ukuran terkecil agar teks tidak terjepit saat di layar kecil */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 10px;
+    background-color: #152C5B; 
+    border: 1px solid var(--menu-border);
+    border-radius: 12px;
+    color: var(--menu-text);
+    cursor: pointer;
+    position: relative;
 }
 
 /* Efek saat tombol disorot (hover) oleh mouse */
