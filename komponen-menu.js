@@ -9,6 +9,19 @@ export function buatKomponenATP(teksHtml) {
     `;
 }
 
+// 2. KOMPONEN ASESMEN AWAL (Menggunakan Iframe)
+export function buatKomponenAsesmenAwal(urlHalaman) {
+    // Parameter urlHalaman akan berisi teks seperti "materi/kelas7/.../p1-asesmen.html"
+    let htmlSoal = `
+        <div class="kuis-container">
+            <h3 style="margin-bottom: 20px;">📝 Asesmen Awal</h3>
+            <!-- Menggunakan iframe untuk memuat file HTML dari dalam folder -->
+            <iframe src="${urlHalaman}" width="100%" height="500px" style="border: 1px solid #e2e8f0; border-radius: 8px;"></iframe>
+        </div>
+    `;
+    return htmlSoal;
+}
+
 // 3. KOMPONEN PERTANYAAN ESENSIAL (Menggunakan Iframe)
 export function buatKomponenPertanyaanEsensial(urlHalaman) {
     return `
