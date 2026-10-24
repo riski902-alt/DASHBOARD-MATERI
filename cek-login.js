@@ -1,9 +1,9 @@
 // ==========================================
 // File: cek-login.js
-// Tujuan: Mendukung Login Siswa & Login Guru secara bersamaan
+// Tujuan: Mencegah pemblokiran Guru & memvalidasi login Siswa/Guru
 // ==========================================
 
-// Helper: Cek apakah string hanya berisi angka
+// Helper: Cek apakah string hanya berisi angka (NISN)
 function apakahHanyaAngka(teks) {
     if (!teks) return false;
     return /^\d+$/.test(teks.toString().trim());
@@ -12,32 +12,38 @@ function apakahHanyaAngka(teks) {
 // 1. Deteksi Peran (Role): 'guru' atau 'siswa'
 function dapatkanRoleUser() {
     const urlParams = new URLSearchParams(window.location.search);
-    const roleDariUrl = urlParams.get('role') || urlParams.get('user_role');
+    const roleUrl = urlParams.get('role') || urlParams.get('user_role') || urlParams.get('type');
     
-    if (roleDariUrl) {
-        const roleClean = roleDariUrl.toLowerCase().trim();
+    if (roleUrl) {
+        const roleClean = roleUrl.toLowerCase().trim();
         localStorage.setItem('infoFun_Role', roleClean);
         return roleClean;
     }
 
+    // Cek kata kunci role di localStorage
     const roleDisimpan = localStorage.getItem('infoFun_Role') || 
                          localStorage.getItem('role') || 
-                         localStorage.getItem('user_role');
+                         localStorage.getItem('user_role') ||
+                         localStorage.getItem('user_type');
 
     if (roleDisimpan) return roleDisimpan.toLowerCase().trim();
 
-    // Jika ada penanda email Guru di localStorage, set otomatis sebagai guru
-    if (localStorage.getItem('infoFun_Email') || localStorage.getItem('guru_email')) {
-        return 'guru';
+    // Deteksi otomatis via email atau penanda Guru di localStorage
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const val = (localStorage.getItem(key) || '').toLowerCase();
+        if (key.includes('guru') || key.includes('email') || val.includes('@guru') || val.includes('guru')) {
+            return 'guru';
+        }
     }
 
-    return 'siswa'; // Default role
+    return 'siswa';
 }
 
 // 2. Fungsi Pembaca Nama User (Siswa / Guru)
 function dapatkanNamaUser() {
     const urlParams = new URLSearchParams(window.location.search);
-    const namaUrl = urlParams.get('nama') || urlParams.get('namaLengkap') || urlParams.get('nama_siswa');
+    const namaUrl = urlParams.get('nama') || urlParams.get('namaLengkap') || urlParams.get('nama_siswa') || urlParams.get('user');
     
     if (namaUrl) {
         const namaClean = decodeURIComponent(namaUrl).trim();
@@ -47,7 +53,7 @@ function dapatkanNamaUser() {
         }
     }
 
-    const kunciNama = ['infoFun_Nama', 'namaLengkap', 'nama_siswa', 'nama', 'currentUser', 'user_nama', 'guru_nama'];
+    const kunciNama = ['infoFun_Nama', 'namaLengkap', 'nama_siswa', 'nama', 'currentUser', 'user_nama', 'guru_nama', 'nama_guru'];
     
     for (const kunci of kunciNama) {
         const val = localStorage.getItem(kunci);
@@ -89,15 +95,15 @@ const roleUser = dapatkanRoleUser();
 const namaUser = dapatkanNamaUser();
 const nisnSiswa = dapatkanNISNSiswa();
 
-let isLoginValid = false;
+// Cek status login Guru dan Siswa
+let isGuruLoggedIn = roleUser === 'guru' || 
+                     !!localStorage.getItem('infoFun_Email') || 
+                     !!localStorage.getItem('guru_email') || 
+                     !!localStorage.getItem('email');
 
-if (roleUser === 'guru') {
-    // Untuk Guru: Cukup ada sesi/nama Guru (tidak memerlukan NISN)
-    isLoginValid = !!namaUser || !!localStorage.getItem('infoFun_Email') || !!localStorage.getItem('guru_email');
-} else {
-    // Untuk Siswa: Wajib ada Nama DAN NISN (Sesuai sistem siswa yang sudah berhasil)
-    isLoginValid = !!namaUser && !!nisnSiswa;
-}
+let isSiswaLoggedIn = !!namaUser && !!nisnSiswa;
+
+let isLoginValid = isGuruLoggedIn || isSiswaLoggedIn;
 
 // Pengalihan jika belum login
 if (!isLoginValid && !window.location.href.includes("LOGIN-MATERI")) {
@@ -114,10 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const roleAktif = dapatkanRoleUser();
 
     if (userNameDisplay) {
-        if (namaAktif) {
-            userNameDisplay.innerText = roleAktif === 'guru' ? `[Guru] ${namaAktif}` : namaAktif;
-        } else if (roleAktif === 'guru') {
-            userNameDisplay.innerText = "Guru Informatika";
+        if (roleAktif === 'guru') {
+            userNameDisplay.innerText = namaAktif ? `[Guru] ${namaAktif}` : "[Guru] Riski Amalia, S.Pd";
+        } else if (namaAktif) {
+            userNameDisplay.innerText = namaAktif;
         } else {
             userNameDisplay.innerText = "Siswa Informatika";
         }
@@ -126,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (logoutBtn) {
         logoutBtn.style.display = 'inline-block';
         logoutBtn.addEventListener('click', () => {
-            if (confirm("Apakah kamu yakin ingin keluar dari akun ini?")) {
+            if (confirm("Apakah Anda yakin ingin keluar dari akun ini?")) {
                 localStorage.clear();
                 window.location.href = loginUrlLengkap;
             }
