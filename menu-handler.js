@@ -86,7 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         currentActiveMenu = menuId;
         renderMenuUI();
-        loadMenuContent(menuId);
+        
+        // PERBAIKAN DI SINI: 
+        // Cegah menu-handler.js menimpa konten jika yang diklik adalah ATP.
+        if (menuId !== 'atp') {
+            loadMenuContent(menuId);
+        }
     };
 
     // Mendaftarkan Event Listener ke Seluruh Tombol Menu
