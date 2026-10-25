@@ -115,7 +115,7 @@
 
             <!-- CONTAINER 7 TOMBOL MENU -->
             <nav class="learning-menu-container">
-                <button class="menu-btn" id="btn-atp" onclick="bukaModalATP('kelas7-sem1-bab1-pertemuan1')">
+                <button class="menu-btn" id="btn-atp">
     <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
     <span class="menu-text">ATP</span>
     <div class="menu-status"><i class="ph ph-caret-right"></i></div>
@@ -172,26 +172,37 @@
         } from './komponen-menu.js';
 
         async function muatDataMateri() {
-            try {
-                const response = await fetch('materi.json');
-                if (!response.ok) throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
-                const dataSemuaMateri = await response.json();
+    try {
+        const response = await fetch('materi.json');
+        if (!response.ok) throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
+        const dataSemuaMateri = await response.json();
 
-                const currentId = new URLSearchParams(window.location.search).get('id') || Object.keys(dataSemuaMateri)[0];
-                const dataMateri = dataSemuaMateri[currentId];
+        // 1. Mengambil ID dari URL
+        const currentId = new URLSearchParams(window.location.search).get('id') || Object.keys(dataSemuaMateri)[0];
+        const dataMateri = dataSemuaMateri[currentId];
 
-                if (!dataMateri) {
-                    console.error("Materi tidak ditemukan!");
-                    return;
-                }
-
-                document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
-                document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
-
-            } catch (error) {
-                console.error("Terjadi kesalahan saat memuat materi:", error);
-            }
+        if (!dataMateri) {
+            console.error("Materi tidak ditemukan!");
+            return;
         }
+
+        // 2. Memperbarui teks judul
+        document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
+        document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
+
+        // 3. KODE BARU: Mengatur tombol ATP agar dinamis
+        const tombolATP = document.getElementById('btn-atp');
+        if (tombolATP) {
+            // Saat tombol diklik, buka modal menggunakan ID materi yang sedang aktif
+            tombolATP.onclick = () => {
+                bukaModalATP(currentId);
+            };
+        }
+
+    } catch (error) {
+        console.error("Terjadi kesalahan saat memuat materi:", error);
+    }
+}
 
         muatDataMateri();
     </script>
