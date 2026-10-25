@@ -1,123 +1,79 @@
 // Fungsi Utama untuk Membuka ATP
 async function bukaModalATP(idPertemuan) {
-    // 1. Buat kontainer Modal jika belum ada
+    // Memeriksa dan membuat kontainer Modal jika belum ada
     let modalOverlay = document.getElementById('atp-modal-overlay');
     if (!modalOverlay) {
         modalOverlay = document.createElement('div');
         modalOverlay.id = 'atp-modal-overlay';
-        // Styling CSS bawaan untuk Overlay (Navy/Denim transparansi)
+        
+        // Styling CSS untuk latar belakang gelap (overlay)
         Object.assign(modalOverlay.style, {
             position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-            backgroundColor: 'rgba(21, 44, 91, 0.7)', // Denim blue transparan
+            backgroundColor: 'rgba(0, 0, 0, 0.6)', 
             display: 'flex', justifyContent: 'center', alignItems: 'center',
-            zIndex: '9999', opacity: '0', transition: 'opacity 0.3s ease',
-            backdropFilter: 'blur(4px)'
+            zIndex: '9999'
         });
 
-        // Buat kotak Modal (Kartu)
+        // Styling CSS untuk kotak konten (modal box)
         const modalBox = document.createElement('div');
         modalBox.id = 'atp-modal-box';
         Object.assign(modalBox.style, {
             backgroundColor: '#ffffff', width: '90%', maxWidth: '600px',
-            maxHeight: '85vh', overflowY: 'auto', borderRadius: '16px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.2)', transform: 'translateY(20px)',
-            transition: 'transform 0.3s ease', display: 'flex', flexDirection: 'column'
+            maxHeight: '80vh', overflowY: 'auto', borderRadius: '8px',
+            padding: '20px', position: 'relative'
         });
 
-        // Header Modal
-        const header = document.createElement('div');
-        Object.assign(header.style, {
-            backgroundColor: '#152C5B', // Navy / Denim Blue
-            color: '#ffffff', padding: '20px', borderTopLeftRadius: '16px',
-            borderTopRightRadius: '16px', display: 'flex', 
-            justifyContent: 'space-between', alignItems: 'center'
+        // Tombol Tutup (X)
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '&times; Tutup';
+        Object.assign(closeBtn.style, {
+            position: 'absolute', top: '15px', right: '20px',
+            background: '#ff4d4d', color: 'white', border: 'none',
+            padding: '5px 10px', borderRadius: '4px', cursor: 'pointer'
         });
-        header.innerHTML = `
-            <h2 style="margin: 0; font-size: 1.2rem; display: flex; alignItems: center; gap: 10px;">
-                <span style="color: #88D4AB;">■</span> Alur Tujuan Pembelajaran
-            </h2>
-            <button onclick="tutupModalATP()" style="background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; line-height: 1;">&times;</button>
-        `;
+        closeBtn.onclick = tutupModalATP;
 
-        // Body Modal (Tempat konten JSON)
+        // Area untuk memasukkan teks dari JSON
         const body = document.createElement('div');
         body.id = 'atp-modal-content';
-        Object.assign(body.style, {
-            padding: '25px', color: '#333', lineHeight: '1.6', fontSize: '0.95rem'
-        });
+        body.style.marginTop = '20px';
 
-        modalBox.appendChild(header);
+        modalBox.appendChild(closeBtn);
         modalBox.appendChild(body);
         modalOverlay.appendChild(modalBox);
         document.body.appendChild(modalOverlay);
-
-        // Tutup modal jika area luar diklik
-        modalOverlay.addEventListener('click', function(e) {
-            if (e.target === modalOverlay) tutupModalATP();
-        });
     }
 
     const contentArea = document.getElementById('atp-modal-content');
-    const modalBox = document.getElementById('atp-modal-box');
+    const modalOverlay = document.getElementById('atp-modal-overlay');
     
-    // Tampilkan Modal dengan animasi Fade-In
+    // Tampilkan Modal
     modalOverlay.style.display = 'flex';
-    // Timeout kecil untuk trigger transisi CSS
-    setTimeout(() => {
-        modalOverlay.style.opacity = '1';
-        modalBox.style.transform = 'translateY(0)';
-    }, 10);
+    contentArea.innerHTML = '<p>Memuat data...</p>';
 
-    // State Loading
-    contentArea.innerHTML = `<div style="text-align: center; color: #152C5B; padding: 20px;">Memuat data ATP...</div>`;
-
-    // 2. Proses Ambil Data JSON
     try {
-        const response = await fetch('atp.json');
-        if (!response.ok) throw new Error('Gagal mengakses data jaringan.');
+        // Mengambil data secara spesifik dari file atp.json
+        const response = await fetch('atp.json'); 
+        if (!response.ok) throw new Error('Gagal memuat file.');
         
         const dataATP = await response.json();
 
-        // 3. Tampilkan Data atau Tampilkan Error jika ID tidak cocok
+        // Mengecek apakah idPertemuan ada di dalam atp.json
         if (dataATP[idPertemuan] && dataATP[idPertemuan].konten) {
-            // Render HTML dari JSON
-            contentArea.innerHTML = `
-                <div class="atp-styled-content">
-                    ${dataATP[idPertemuan].konten}
-                </div>
-            `;
-            
-            // Tambahkan styling khusus untuk elemen h3 (Judul Bagian) agar serasi
-            const headers = contentArea.querySelectorAll('h3');
-            headers.forEach(h3 => {
-                Object.assign(h3.style, {
-                    color: '#152C5B', fontSize: '1.1rem', marginTop: '15px', 
-                    marginBottom: '5px', borderBottom: '2px solid #88D4AB', paddingBottom: '5px'
-                });
-            });
-            const paragraphs = contentArea.querySelectorAll('p');
-            paragraphs.forEach(p => {
-                p.style.marginBottom = '15px';
-            });
-
+            // Menampilkan properti konten yang berisi elemen HTML (seperti h3 dan p)
+            contentArea.innerHTML = dataATP[idPertemuan].konten;
         } else {
-            contentArea.innerHTML = `<div style="text-align: center; color: #e74c3c; padding: 20px;">Data ATP untuk pertemuan ini belum tersedia.</div>`;
+            contentArea.innerHTML = '<p style="color:red;">Data tidak ditemukan untuk pertemuan ini.</p>';
         }
     } catch (error) {
-        contentArea.innerHTML = `<div style="text-align: center; color: #e74c3c; padding: 20px;">Terjadi kesalahan sistem: ${error.message}</div>`;
-        console.error("ATP Fetch Error:", error);
+        contentArea.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
     }
 }
 
-// Fungsi Utama untuk Menutup ATP
+// Fungsi untuk Menutup ATP
 function tutupModalATP() {
     const modalOverlay = document.getElementById('atp-modal-overlay');
-    const modalBox = document.getElementById('atp-modal-box');
     if (modalOverlay) {
-        modalOverlay.style.opacity = '0';
-        modalBox.style.transform = 'translateY(20px)';
-        setTimeout(() => {
-            modalOverlay.style.display = 'none';
-        }, 300); // Sesuaikan dengan durasi transisi
+        modalOverlay.style.display = 'none';
     }
 }
