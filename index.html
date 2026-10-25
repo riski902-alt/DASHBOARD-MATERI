@@ -16,8 +16,6 @@
     <!-- Skrip Pemeriksa Login & Handler Menu -->
     <script src="cek-login.js"></script>
     <script src="menu-handler.js"></script>
-
-    <script src="komponen-atp.js"></script>
       
     <!-- Pemanggilan File CSS -->
     <link rel="stylesheet" href="style.css">
@@ -116,10 +114,10 @@
             <!-- CONTAINER 7 TOMBOL MENU -->
             <nav class="learning-menu-container">
                 <button class="menu-btn" id="btn-atp">
-    <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
-    <span class="menu-text">ATP</span>
-    <div class="menu-status"><i class="ph ph-caret-right"></i></div>
-</button>
+                    <div class="menu-icon"><i class="ph ph-list-checks"></i></div>
+                    <span class="menu-text">ATP</span>
+                    <div class="menu-status"><i class="ph ph-caret-right"></i></div>
+                </button>
                 <button class="menu-btn locked" id="btn-asesmen-awal" disabled>
                     <div class="menu-icon"><i class="ph ph-clipboard-text"></i></div>
                     <span class="menu-text">Asesmen Awal</span>
@@ -159,7 +157,7 @@
         <!-- Konten dari JSON akan dimuat di sini -->
     </div>
 
-    <!-- SKRIP UTAMA UNTUK MEMUAT JSON -->
+    <!-- SKRIP UTAMA UNTUK MEMUAT JSON & FUNGSI INLINE ATP -->
     <script type="module">
         import {
             buatKomponenATP,
@@ -171,39 +169,61 @@
             buatKomponenAsLearning
         } from './komponen-menu.js';
 
+        // Fungsi Baru untuk memuat ATP langsung ke halaman
+        async function muatKontenATPLangsung(idPertemuan) {
+            const areaKonten = document.getElementById('dynamic-content-area');
+            if (!areaKonten) return;
+
+            areaKonten.innerHTML = '<p style="text-align:center;">Memuat data ATP...</p>';
+
+            try {
+                const response = await fetch('atp.json');
+                if (!response.ok) throw new Error('Gagal memuat file atp.json.');
+                
+                const dataATP = await response.json();
+
+                if (dataATP[idPertemuan] && dataATP[idPertemuan].konten) {
+                    areaKonten.innerHTML = dataATP[idPertemuan].konten;
+                } else {
+                    areaKonten.innerHTML = '<p style="text-align:center;">Data ATP belum tersedia untuk pertemuan ini.</p>';
+                }
+            } catch (error) {
+                areaKonten.innerHTML = `<p style="color:var(--status-red); text-align:center;">Terjadi kesalahan: ${error.message}</p>`;
+            }
+        }
+
         async function muatDataMateri() {
-    try {
-        const response = await fetch('materi.json');
-        if (!response.ok) throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
-        const dataSemuaMateri = await response.json();
+            try {
+                const response = await fetch('materi.json');
+                if (!response.ok) throw new Error(`Gagal memuat file JSON! Status: ${response.status}`);
+                const dataSemuaMateri = await response.json();
 
-        // 1. Mengambil ID dari URL
-        const currentId = new URLSearchParams(window.location.search).get('id') || Object.keys(dataSemuaMateri)[0];
-        const dataMateri = dataSemuaMateri[currentId];
+                // 1. Mengambil ID dari URL
+                const currentId = new URLSearchParams(window.location.search).get('id') || Object.keys(dataSemuaMateri)[0];
+                const dataMateri = dataSemuaMateri[currentId];
 
-        if (!dataMateri) {
-            console.error("Materi tidak ditemukan!");
-            return;
+                if (!dataMateri) {
+                    console.error("Materi tidak ditemukan!");
+                    return;
+                }
+
+                // 2. Memperbarui teks judul
+                document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
+                document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
+
+                // 3. Mengatur tombol ATP agar dinamis (Menggunakan fungsi baru)
+                const tombolATP = document.getElementById('btn-atp');
+                if (tombolATP) {
+                    tombolATP.onclick = () => {
+                        console.log("Tombol ATP diklik! Mencari ID materi:", currentId); 
+                        muatKontenATPLangsung(currentId);
+                    };
+                }
+
+            } catch (error) {
+                console.error("Terjadi kesalahan saat memuat materi:", error);
+            }
         }
-
-        // 2. Memperbarui teks judul
-        document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
-        document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
-
-    // 3. KODE BARU: Mengatur tombol ATP agar dinamis
-        const tombolATP = document.getElementById('btn-atp');
-        if (tombolATP) {
-            tombolATP.onclick = () => {
-                // Baris ini akan mencetak pesan ke Console browser untuk mengecek ID
-                console.log("Tombol ATP diklik! Mencari ID materi:", currentId); 
-                bukaModalATP(currentId);
-            };
-        }
-
-    } catch (error) {
-        console.error("Terjadi kesalahan saat memuat materi:", error);
-    }
-}
 
         muatDataMateri();
     </script>
