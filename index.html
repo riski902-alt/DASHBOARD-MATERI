@@ -158,7 +158,7 @@
     </div>
 
     <!-- SKRIP UTAMA UNTUK MEMUAT JSON & FUNGSI INLINE ATP -->
-    <script type="module">
+    
         import {
             buatKomponenATP,
             buatKomponenAsesmenAwal,
@@ -213,12 +213,18 @@
 
                 // 3. Mengatur tombol ATP agar dinamis (Menggunakan fungsi baru)
                 const tombolATP = document.getElementById('btn-atp');
-                if (tombolATP) {
-                    tombolATP.onclick = () => {
-                        console.log("Tombol ATP diklik! Mencari ID materi:", currentId); 
-                        muatKontenATPLangsung(currentId);
-                    };
-                }
+if (tombolATP) {
+    tombolATP.onclick = (event) => {
+        // Mencegah tombol melakukan refresh halaman
+        event.preventDefault(); 
+        
+        // Mencegah bentrok dengan perintah dari menu-handler.js
+        event.stopPropagation(); 
+        
+        console.log("Tombol ATP diklik! Mencari ID materi:", currentId); 
+        muatKontenATPLangsung(currentId);
+    };
+}
 
             } catch (error) {
                 console.error("Terjadi kesalahan saat memuat materi:", error);
