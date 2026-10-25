@@ -190,11 +190,12 @@
         document.getElementById('judul-bab').innerText = dataMateri.judul_bab;
         document.getElementById('pertemuan-info').innerText = dataMateri.judul_pertemuan;
 
-        // 3. KODE BARU: Mengatur tombol ATP agar dinamis
+    // 3. KODE BARU: Mengatur tombol ATP agar dinamis
         const tombolATP = document.getElementById('btn-atp');
         if (tombolATP) {
-            // Saat tombol diklik, buka modal menggunakan ID materi yang sedang aktif
             tombolATP.onclick = () => {
+                // Baris ini akan mencetak pesan ke Console browser untuk mengecek ID
+                console.log("Tombol ATP diklik! Mencari ID materi:", currentId); 
                 bukaModalATP(currentId);
             };
         }
